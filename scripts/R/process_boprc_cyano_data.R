@@ -6,6 +6,7 @@ library(tidyverse)
 
 dir <- 'data/boprc_cyano/og_excel_files'
 fls <- list.files(dir)
+fls
 
 fl_1 <- read_excel(paste0(dir, "/", fls[1])) %>% 
   filter(Location=='Rotorua') %>% 
