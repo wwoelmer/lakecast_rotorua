@@ -1,12 +1,13 @@
 library(ggpubr)
+library(tidyverse)
 
+talt <- read.csv('./data/talt_cyano/LakeCast_data_digitized(2025).csv') 
 
-talt <- read.csv('./data/talt_cyano/LakeCast_data_digitized(Sheet1).csv') %>% 
-  select(-X)
+talt$Date <- as.Date(dmy(talt$Date))
 
 # fill in dates, times, and sites
 talt_filled <- talt %>% 
-  mutate(across(everything(), ~ ifelse(. == "", NA, .))) %>% 
+  mutate(across(!Date, ~ ifelse(. == "", NA, .))) %>% 
   fill(Date, .direction = 'down') %>% 
   group_by(Date) %>% 
   fill(Site, .direction = 'down') %>% 
@@ -36,48 +37,64 @@ talt_filled$Date <- as.Date(talt_filled$Date, format = "%d/%m/%Y")
 talt_filled$FQ_ratio <- as.numeric(talt_filled$FQ_ratio)
 talt_filled$DO_pct <- as.numeric(talt_filled$DO_pct)
 
+# remove any extra spaces on site column
+talt_filled$Site <- trimws(talt_filled$Site)
+
+# force FQ phycocyanin to numeric
+talt_filled$FQ_PH <- as.numeric(talt_filled$FQ_PH)
+
+write.csv(talt_filled, paste0('./data/talt_cyano/talt_cyano_formatted_', Sys.Date(), '.csv'), row.names = FALSE)
+
 ggplot(talt_filled, aes(x = Date, y = FQ_chl, color = Site)) +
   geom_line() +
   geom_point(size = 2) +
-  facet_wrap(~Site) +
+  facet_wrap(~Site, scales = 'free') +
   ylab('FluoroQuick Chl-a') +
   theme_bw()
 
 ggplot(talt_filled, aes(x = Date, y = CF_chl, color = Site)) +
   geom_line() +
   geom_point(size = 2) +
-  facet_wrap(~Site)
+  facet_wrap(~Site, scales = 'free') +
+  theme_bw()
 
-ggplot(talt_filled, aes(x = Date, y = FQ_PH, color = Site)) +
+talt_filled %>% 
+ggplot(aes(x = Date, y = as.numeric(FQ_PH), color = Site)) +
   geom_line() +
   geom_point(size = 2) +
-  facet_wrap(~Site)
+  facet_wrap(~Site) +
+  theme_bw()
 
 ggplot(talt_filled, aes(x = Date, y = CF_PH, color = Site)) +
   geom_line() +
   geom_point(size = 2) +
-  facet_wrap(~Site)
+  facet_wrap(~Site, scales = 'free') +
+  theme_bw()
 
 
-a <- ggplot(talt_filled, aes(x = FQ_PH, y = CF_PH, color = Site)) +
+a <- talt_filled %>% 
+  filter(FQ_PH < 4000) %>% 
+  ggplot(aes(x = as.numeric(FQ_PH), y = CF_PH, color = Site)) +
   geom_point(size = 2) +
   theme_bw() +
   xlab('FluoroQuick Phycocyanin') +
   ylab('CyanoFluor Phycocyanin')
-
-b <- ggplot(talt_filled, aes(x = FQ_chl, y = CF_chl, color = Site)) +
+a
+b <- talt_filled %>% 
+#  filter(FQ_chl < 400) %>% 
+  ggplot(aes(x = FQ_chl, y = CF_chl, color = Site)) +
   geom_point(size = 2) +
   theme_bw() +
   xlab('FluoroQuick chl-a') +
   ylab('CyanoFluor chl-a')
+
+ggarrange(a, b, common.legend = TRUE)
 
 ggplot(talt_filled, aes(x = FQ_chl, y = chl_RFU, color = Site)) +
   geom_point(size = 2) +
   theme_bw() +
   xlab('FluoroQuick chl-a') +
   ylab('ProDSS chl-a')
-
-ggarrange(a, b, common.legend = TRUE)
 
 ggplot(talt_filled, aes(x = FQ_ratio, y = CF_ratio, color = Site)) +
   geom_point() +
