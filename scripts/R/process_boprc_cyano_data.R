@@ -1,6 +1,6 @@
 # routine processing and appending function for BOPRC cyanobacterial monitoring data
 library(readxl)
-
+library(tidyverse)
 #1: convert and form excel, save as csv
 #2 append to existing data
 
@@ -53,5 +53,5 @@ colnames(fl_2)
 write.csv(fl_2,
           paste0('./data/boprc_cyano/boprc_cyano_', 
                  min(fl_2$SampleDate), '_',
-                 max(fl_2$SampleDate), 'csv'),
+                 max(fl_2$SampleDate), '.csv'),
           row.names = FALSE)
