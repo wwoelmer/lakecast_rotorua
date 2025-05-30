@@ -1,7 +1,7 @@
 library(ggpubr)
 library(tidyverse)
 
-talt <- read.csv('./data/talt_cyano/og_csv_files/LakeCast_data_digitized(2025).csv') 
+talt <- read.csv('./data/talt_cyano/og_csv_files/LakeCast_data_digitized(2025)_30MAY2025.csv') 
 
 talt$Date <- as.Date(dmy(talt$Date))
 
