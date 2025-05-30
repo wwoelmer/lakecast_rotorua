@@ -1,7 +1,7 @@
 # compare BOPRC and TALT data
 
-boprc <- read.csv('./data/boprc_cyano/boprc_cyano_2015-01-07_2025-04-28.csv')
-talt <- read.csv('./data/talt_cyano/talt_cyano_formatted_2025-05-08.csv')
+boprc <- read.csv('./data/boprc_cyano/boprc_cyano_2015-01-07_2025-05-12.csv')
+talt <- read.csv('./data/talt_cyano/talt_cyano_formatted_2025-05-20.csv')
 talt$Site <- trimws(talt$Site)
 
 talt_long <- talt %>% 
