@@ -43,7 +43,11 @@ talt_filled$Site <- trimws(talt_filled$Site)
 # force FQ phycocyanin to numeric
 talt_filled$FQ_PH <- as.numeric(talt_filled$FQ_PH)
 
-write.csv(talt_filled, paste0('./data/talt_cyano/talt_cyano_formatted_', Sys.Date(), '.csv'), row.names = FALSE)
+write.csv(talt_filled, 
+          paste0('./data/talt_cyano/talt_cyano_formatted_', 
+                 min(talt_filled$Date), '_',
+                 max(talt_filled$Date), '.csv'),
+          row.names = FALSE)
 
 ggplot(talt_filled, aes(x = Date, y = FQ_chl, color = Site)) +
   geom_line() +
