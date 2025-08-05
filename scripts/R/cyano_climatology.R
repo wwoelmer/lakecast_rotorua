@@ -1,49 +1,68 @@
 # produce climatology forecasts at BOPRC sites from long-term records
-boprc <- read.csv('./data/boprc_cyano/boprc_cyano_2015-01-07_2025-05-12.csv')
+# trigger to run script: new observations added to boprc_cyano_2015-01-07_DATE.csv
+# OR new file added in that folder with name prefix of boprc_cyano_**
+library(tidyverse)
+
+boprc <- read.csv('./data/boprc_cyano/boprc_cyano_2015-01-07_2025-05-26.csv')
 
 boprc <- boprc %>% 
   select(Location, Site, SampleDate, PotentiallyToxicBioVolume) %>% 
   filter(!is.na(PotentiallyToxicBioVolume))
 
-ggplot(boprc, aes(x = log(PotentiallyToxicBioVolume))) +
+# sum the biovolume on a given site and day (following NERM Cyanobacteria protocol 2024,
+# alert levels are based on the combined total of all cyanobacteria)
+boprc <- boprc %>% 
+  group_by(Site, SampleDate) %>% 
+  summarise(sum_biovolume = sum(PotentiallyToxicBioVolume))
+
+ggplot(boprc, aes(x = sum_biovolume)) +
   geom_histogram()
 
-# convert potentially toxic into warning or no based on guidelines
+ggplot(boprc, aes(x = log(sum_biovolume))) +
+  geom_histogram()
+
+# convert potentially toxic into warning levels based on guideline
 # thresholds from BOPRC based on biovolume
 boprc <- boprc %>% 
-  mutate(warning = case_when(PotentiallyToxicBioVolume < 0.5 ~ 'green',
-                             PotentiallyToxicBioVolume > 0.5 & PotentiallyToxicBioVolume < 9.99 ~ 'orange',
-                             PotentiallyToxicBioVolume > 10 ~ 'red'))
+  mutate(warning = case_when(sum_biovolume < 0.5 ~ 'green',
+                             sum_biovolume > 0.5 & sum_biovolume < 9.99 ~ 'orange',
+                             sum_biovolume > 10 ~ 'red'))
 
 ggplot(boprc, aes(x = as.Date(SampleDate), y = warning, color = warning)) +
   geom_point() +
   facet_wrap(~Site) +
   scale_color_manual(values = c('green', 'orange', 'red', 'gray'))
 
-# calculate mean and sd of potentially toxic biovolume for each doy and site
+# add week and day of year
 boprc <- boprc %>% 
   mutate(doy = yday(SampleDate),
-         year = year(SampleDate))
+         year = year(SampleDate),
+         week = week(SampleDate))
 
-ggplot(boprc, aes(x = doy, y = warning, color = as.factor(year))) +
+ggplot(boprc, aes(x = week, y = warning, color = as.factor(year))) +
   geom_point() +
   facet_wrap(~Site) 
 
-ggplot(boprc, aes(x = doy, y = PotentiallyToxicBioVolume, color = as.factor(year))) +
+ggplot(boprc, aes(x = week, y = sum_biovolume, color = as.factor(year))) +
   geom_point() +
   facet_wrap(~Site) 
 
+#calculate mean and sd of potentially toxic biovolume for each week and site
 # first log transform the data because it is not normally distributed, then take mean/sd
-min_val <- min(boprc$PotentiallyToxicBioVolume[boprc$PotentiallyToxicBioVolume > 0])
+min_val <- min(boprc$sum_biovolume[boprc$sum_biovolume > 0])
 
 climatology <- boprc %>% 
-  group_by(Site, doy) %>% 
-  mutate(log_biovolume = log(PotentiallyToxicBioVolume + min_val)) %>% 
-  summarise(mean = mean(log_biovolume),
-            sd = sd(log_biovolume, na.rm = TRUE))
+  group_by(Site, week) %>% 
+  mutate(mean_raw = mean(sum_biovolume),
+         sd_raw = sd(sum_biovolume)) %>% 
+  mutate(log_biovolume = log(sum_biovolume + min_val)) %>% 
+  mutate(mean = mean(log_biovolume),
+            sd = sd(log_biovolume, na.rm = TRUE)) %>% 
+  distinct(Site, week, .keep_all = TRUE) %>% 
+  select(Site, SampleDate, week, mean_raw, sd_raw, mean, sd)
          
 
-ggplot(climatology, aes(x = doy, y = mean)) +
+ggplot(climatology, aes(x = week, y = mean)) +
   geom_point() +
   geom_errorbar(aes(ymin = mean - sd, ymax = mean + sd), width = 0.5) +
   facet_wrap(~Site)
@@ -62,13 +81,13 @@ warnings <- pred %>%
 warnings_long <- warnings %>% 
   pivot_longer(green:red, values_to = 'probability', names_to = 'warning_level')
 
-ggplot(warnings_long, aes(x = doy, y = probability, fill = warning_level)) +
+ggplot(warnings_long, aes(x = week, y = probability, fill = warning_level)) +
   geom_col(position = 'stack') +
   facet_wrap(~Site) +
   scale_fill_manual(values = c('green', 'orange', 'red')) +
   theme_bw()
 
-ggplot(warnings_long, aes(x = doy, y = probability, group = warning_level, 
+ggplot(warnings_long, aes(x = week, y = probability, group = warning_level, 
                           color = warning_level)) +
   geom_line(size = 1) +
   facet_wrap(~Site) +
@@ -82,7 +101,7 @@ ggplot(warnings_long, aes(x = probability, fill = Site)) +
 
 warnings_long %>% 
   filter(warning_level=='red') %>% 
-  ggplot(aes(x = doy, y = probability)) +
+  ggplot(aes(x = week, y = probability)) +
   geom_line(size = 2) +
   facet_wrap(~Site) +
   geom_hline(yintercept = 0.50) +
@@ -91,9 +110,13 @@ warnings_long %>%
 
 # just check that the probabilities sum to 100
 daily_summary <- warnings_long %>% 
-  group_by(Site, doy) %>% 
+  group_by(Site, week) %>% 
   summarise(total_prob = sum(probability, na.rm = TRUE))
 
+warnings_save <- warnings_long %>% 
+  select(-ens_pred)
+
+write.csv(warnings_save, './forecasts/climatology_values_probabilities.csv', row.names = FALSE)
 #################################################################################
 # produce spatial persistence forecasts at BOPRC using TALT sites
 
