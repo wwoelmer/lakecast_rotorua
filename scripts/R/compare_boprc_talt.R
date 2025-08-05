@@ -1,7 +1,7 @@
 # compare BOPRC and TALT data
 
-boprc <- read.csv('./data/boprc_cyano/boprc_cyano_2015-01-07_2025-05-12.csv')
-talt <- read.csv('./data/talt_cyano/talt_cyano_formatted_2025-05-20.csv')
+boprc <- read.csv('./data/boprc_cyano/boprc_cyano_2015-01-07_2025-05-26.csv')
+talt <- read.csv('./data/talt_cyano/talt_cyano_formatted_2025-01-20_2025-07-23.csv')
 talt$Site <- trimws(talt$Site)
 
 talt_long <- talt %>% 
@@ -45,13 +45,13 @@ ggplot(df_combo, aes(x = as.Date(Date), y = FQ_PH, color = 'TALT')) +
   geom_point() +
   geom_point(aes(y = sum_biovolume, color = 'BOPRC'), size = 3) +
   facet_wrap(~Site, scales = 'free')# +
-  scale_y_continuous(sec.axis = sec_axis(~./50))
+#  scale_y_continuous(sec.axis = sec_axis(~./50))
   
   ggplot(df_combo, aes(x = as.Date(Date), y = chl_RFU, color = 'TALT')) +
     geom_point() +
     geom_point(aes(y = sum_biovolume, color = 'BOPRC'), size = 3) +
     facet_wrap(~Site, scales = 'free')# +
-  scale_y_continuous(sec.axis = sec_axis(~./50))
+  #scale_y_continuous(sec.axis = sec_axis(~./50))
 
 df_long <- left_join(boprc_grouped, talt_long)
 
