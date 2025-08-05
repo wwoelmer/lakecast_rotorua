@@ -1,7 +1,7 @@
 library(ggpubr)
 library(tidyverse)
 
-talt <- read.csv('./data/talt_cyano/og_csv_files/LakeCast_data_digitized(2025)_30MAY2025.csv') 
+talt <- read.csv('./data/talt_cyano/og_csv_files/LakeCast_data_digitized(2025).csv') 
 
 talt$Date <- as.Date(dmy(talt$Date))
 
@@ -12,7 +12,12 @@ talt_filled <- talt %>%
   group_by(Date) %>% 
   fill(Site, .direction = 'down') %>% 
   group_by(Date, Site) %>% 
-  fill(Time, .direction = 'down') %>% 
+  fill(Time, .direction = 'down') 
+
+# fill in fluoroquik ID by date
+talt_filled <- talt_filled %>%
+  ungroup() %>% 
+  group_by(Date) %>% 
   fill(FQ_ID, .direction = 'down')
 
 # fill in ProDSS measurements, weaterh & water description based on date-site
@@ -36,6 +41,8 @@ talt_filled <- talt_filled %>%
 talt_filled$Date <- as.Date(talt_filled$Date, format = "%d/%m/%Y")
 talt_filled$FQ_ratio <- as.numeric(talt_filled$FQ_ratio)
 talt_filled$DO_pct <- as.numeric(talt_filled$DO_pct)
+talt_filled$FQ_chl <- as.numeric(talt_filled$FQ_chl)
+talt_filled$CF_chl <- as.numeric(talt_filled$CF_chl)
 
 # remove any extra spaces on site column
 talt_filled$Site <- trimws(talt_filled$Site)
@@ -49,24 +56,24 @@ write.csv(talt_filled,
                  max(talt_filled$Date), '.csv'),
           row.names = FALSE)
 
-ggplot(talt_filled, aes(x = Date, y = FQ_chl, color = Site)) +
+ggplot(talt_filled, aes(x = Date, y = as.numeric(FQ_chl), color = FQ_ID)) +
   geom_line() +
   geom_point(size = 2) +
   facet_wrap(~Site, scales = 'free') +
   ylab('FluoroQuick Chl-a') +
   theme_bw()
 
-ggplot(talt_filled, aes(x = Date, y = CF_chl, color = Site)) +
+ggplot(talt_filled, aes(x = Date, y = as.numeric(CF_chl), color = FQ_ID)) +
   geom_line() +
   geom_point(size = 2) +
   facet_wrap(~Site, scales = 'free') +
   theme_bw()
 
 talt_filled %>% 
-ggplot(aes(x = Date, y = as.numeric(FQ_PH), color = Site)) +
+ggplot(aes(x = Date, y = as.numeric(FQ_PH), color = FQ_ID)) +
   geom_line() +
   geom_point(size = 2) +
-  facet_wrap(~Site) +
+  facet_wrap(~Site, scales = 'free') +
   theme_bw()
 
 ggplot(talt_filled, aes(x = Date, y = CF_PH, color = Site)) +
@@ -86,7 +93,7 @@ a <- talt_filled %>%
 a
 b <- talt_filled %>% 
 #  filter(FQ_chl < 400) %>% 
-  ggplot(aes(x = FQ_chl, y = CF_chl, color = Site)) +
+  ggplot(aes(x = as.numeric(FQ_chl), y = as.numeric(CF_chl), color = Site)) +
   geom_point(size = 2) +
   theme_bw() +
   xlab('FluoroQuick chl-a') +
@@ -94,7 +101,7 @@ b <- talt_filled %>%
 
 ggarrange(a, b, common.legend = TRUE)
 
-ggplot(talt_filled, aes(x = FQ_chl, y = chl_RFU, color = Site)) +
+ggplot(talt_filled, aes(x = as.numeric(FQ_chl), y = chl_RFU, color = Site)) +
   geom_point(size = 2) +
   theme_bw() +
   xlab('FluoroQuick chl-a') +
