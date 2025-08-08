@@ -4,3 +4,5 @@
 .Ruserdata
 data/buoy/rotorua_fixed_sensor_data_2008-01-01_2022-05-04.csv
 .httr-oauth
+lakecast_rotorua.Rproj
+token.rds
