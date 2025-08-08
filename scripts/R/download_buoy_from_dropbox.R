@@ -19,3 +19,15 @@ rdrop2::drop_download(paste0("bop/Rotorua/", fl_name),
                       local_path = local_file,
                       overwrite = TRUE)
 
+
+# now download meteorology
+fl_name_met <- as.data.frame(fls[2,2])
+# name of file once downloaded
+local_file_met <- './data/buoy/rotorua_meteorology_latest.csv'
+
+rdrop2::drop_download(paste0("bop/Rotorua/", fl_name_met),
+                      local_path = local_file_met,
+                      overwrite = TRUE)
+
+
+file.remove(".httr-oauth")
