@@ -1,0 +1,13 @@
+Package: dailyupdate
+Type: Package
+Title: Daily Buoy Update
+Version: 0.1.0
+Authors@R: person("Github", "Actions", role = 'cre')
+Description: Script for downloading, processing, and writing daily CSV updates of buoy data.
+License: MIT
+Encoding: UTF-8
+Imports:
+    tidyverse,
+    rdrop2
+Remotes:
+    karthik/rdrop2
