@@ -43,7 +43,7 @@ jobs:
 
       # Run your script
       - name: Run download and processing script
-        run: Rscript scripts/workflow/download_buoy_latest.R
+        run: Rscript scripts/workflow/05_download_buoy_latest.R
 
       # Commit and push changes
       - name: Commit and push changes
