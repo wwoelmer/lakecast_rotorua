@@ -20,6 +20,15 @@ jobs:
         with:
           python-version: "4.3.1"
 
+      # cache packages
+      - name: Cache R packages
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.R_LIBS_USER }}
+          key: ${{ runner.os }}-r-packages-${{ hashFiles('DESCRIPTION') }}
+          restore-keys: |
+            ${{ runner.os }}-r-packages-
+
       # Install dependencies
       - name: Install R dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
