@@ -33,8 +33,9 @@ jobs:
       - name: Install R dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          packages: |
-            tidyverse
+          extra-packages: |
+            any::tidyverse
+            github::karthik/rdrop2
 
         # Decode the Dropbox token
       - name: Set up Dropbox token
