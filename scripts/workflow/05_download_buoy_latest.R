@@ -2,7 +2,7 @@
 
 #devtools::install_github("karthik/rdrop2")
 library(rdrop2)
-library(dplyr
+library(dplyr)
 
 token <- readRDS("token.rds")
 drop_acc(dtoken = token)  # Or just use functions with `dtoken = token`
