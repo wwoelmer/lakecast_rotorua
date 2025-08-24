@@ -39,8 +39,8 @@ jobs:
 
         # Decode the Dropbox token
       - name: Set up Dropbox token
-        run: |
-          echo "${{ secrets.DROPBOX_TOKEN_BASE64 }}" | base64 --decode > token.rds
+        env:
+          DROPBOX_TOKEN: ${{ secrets.DROPBOX_TOKEN }}
 
       # Run your script
       - name: Run download and processing script
