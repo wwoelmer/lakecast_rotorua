@@ -1,7 +1,11 @@
 #install.packages("Microsoft365R")
 library(Microsoft365R)
 library(readxl)
-onedrive <- get_business_onedrive()
+library(dplyr)
+library(lubridate)
+
+token <- readRDS("token_onedrive.rds")
+onedrive <- get_business_onedrive(token = token)
 
 onedrive$download_file("Documents/U of Waikato/MBIE Smart Ideas Forecasting 2024/QuickFluor/LakeCast_data_digitized.xlsx", 
                        dest = "./data/talt_cyano/talt_cyano_digitized.xlsx",
