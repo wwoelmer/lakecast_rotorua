@@ -5,7 +5,7 @@ library(rdrop2)
 library(dplyr)
 
 # Read the token from GitHub Actions secret
-token_string <- Sys.getenv("DROPBOX_TOKEN")
+token_string <- Sys.getenv("DROPBOX_APP_TOKEN")
 
 
 # name of file once downloaded
