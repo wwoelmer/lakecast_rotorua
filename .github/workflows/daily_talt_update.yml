@@ -1,11 +1,11 @@
-name: Daily Buoy Update
+name: Daily TALT Update
 
 permissions:
   contents: write
   
 on:
   schedule:
-    - cron: "0 0 * * *"  # runs every day at 00:00 UTC
+    - cron: "0 17 * * *"  # runs every day at 17:00 UTC, which is 6am in NZ winter, 5am in NZ summer
   workflow_dispatch:      # allows manual runs
 
 jobs:
@@ -40,36 +40,30 @@ jobs:
         with:
           extra-packages: |
             tidyverse
-            github::karthik/rdrop2
+            readxl
+            Microsoft365R
 
-      # Set up Dropbox token
-      - name: Set up Dropbox token
+      # Set up OneDrive token
+      - name: Set up OneDrive token
         run: |
-          echo "${{ secrets.DROPBOX_APP_TOKEN }}" | base64 --decode > token.rds
+          echo "${{ secrets.ONEDRIVE_TOKEN_BASE64 }}" | base64 --decode > token_onedrive.rds
 
       # Run R script
       - name: Run download and processing script
-        run: Rscript scripts/workflow/05_download_buoy_latest.R
-
-      - name: Check file size
-        run: du -sh data/buoy/*
-
-      - name: Check git status
-        run: git status
+        run: Rscript scripts/workflow/03_process_talt_data.R
 
       - name: List downloaded files
-        run: ls -lh data/buoy/
-        
+        run: ls -lh data/talt_cyano/
+       
 
       # Commit and push changes
       - name: Commit and push changes
         run: |
-         git config --global user.name "github-actions[bot]"
-         git config --global user.email "github-actions[bot]@users.noreply.github.com"
-         git add -A
-         git commit -m "Daily data update $(TZ='Pacific/Auckland' date +'%Y-%m-%d')" || echo "No changes to commit"
-         git pull --rebase origin main
-         git push
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git status
+          git add -A
+          git commit -m "Daily data update $(TZ='Pacific/Auckland' date +'%Y-%m-%d')" || echo "No changes to commit"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

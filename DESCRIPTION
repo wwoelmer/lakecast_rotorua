@@ -7,8 +7,7 @@ Description: Script for downloading, processing, and writing daily CSV updates o
 License: MIT
 Encoding: UTF-8
 Imports:
-    dplyr,
-    lubridate,
+    tidyverse,
     rdrop2,
     readxl,
     Microsoft365R
