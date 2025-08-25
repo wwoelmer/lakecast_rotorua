@@ -40,7 +40,7 @@ jobs:
         # Decode the Dropbox token
       - name: Set up Dropbox token
         env:
-          DROPBOX_TOKEN: ${{ secrets.DROPBOX_TOKEN }}
+          DROPBOX_TOKEN: ${{ secrets.DROPBOX_APP_TOKEN }}
 
       # Run your script
       - name: Run download and processing script
