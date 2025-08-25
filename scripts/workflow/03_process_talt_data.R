@@ -1,8 +1,7 @@
 #install.packages("Microsoft365R")
 library(Microsoft365R)
 library(readxl)
-library(dplyr)
-library(lubridate)
+library(tidyverse)
 
 token <- readRDS("token_onedrive.rds")
 onedrive <- get_business_onedrive(token = token)
