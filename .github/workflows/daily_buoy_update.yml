@@ -15,7 +15,9 @@ jobs:
     steps:
       # Checkout repository
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       # Set up R 
       - name: Set up R
@@ -48,6 +50,16 @@ jobs:
       # Run R script
       - name: Run download and processing script
         run: Rscript scripts/workflow/05_download_buoy_latest.R
+
+      - name: Check file size
+        run: du -sh data/buoy/*
+
+      - name: Check git status
+        run: git status
+
+      - name: List downloaded files
+        run: ls -lh data/buoy/
+        
 
       # Commit and push changes
       - name: Commit and push changes
