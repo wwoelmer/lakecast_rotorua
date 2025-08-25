@@ -37,13 +37,12 @@ jobs:
             dplyr
             github::karthik/rdrop2
 
-        # Decode the Dropbox token
-      - name: Set up Dropbox token
+      # Run R script
+      - name: Run download and processing script
         env:
           DROPBOX_TOKEN: ${{ secrets.DROPBOX_APP_TOKEN }}
-
-      # Run your script
-      - name: Run download and processing script
+          DROPBOX_APP_KEY: ${{ secrets.DROPBOX_APP_KEY }}
+          DROPBOX_APP_SECRET: ${{ secrets.DROPBOX_APP_SECRET }}
         run: Rscript scripts/workflow/05_download_buoy_latest.R
 
       # Commit and push changes
