@@ -10,7 +10,6 @@ Imports:
     tidyverse,
     rdrop2,
     readxl,
-    Microsoft365R,
-    ggpubr
+    Microsoft365R
 Remotes:
     karthik/rdrop2
