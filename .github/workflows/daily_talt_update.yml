@@ -68,7 +68,7 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git status
           git add -A
-          git commit -m "Daily data update $(TZ='Pacific/Auckland' date +'%Y-%m-%d')" || echo "No changes to commit"
+          git commit -m "Daily TALT data update $(TZ='Pacific/Auckland' date +'%Y-%m-%d')" || echo "No changes to commit"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
