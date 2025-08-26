@@ -1,7 +1,7 @@
 #install.packages("Microsoft365R")
 library(Microsoft365R)
 library(readxl)
-#library(ggpubr)
+library(ggpubr)
 library(tidyverse)
 
 token <- readRDS("token_onedrive.rds")
@@ -60,29 +60,29 @@ talt_filled$Site <- trimws(talt_filled$Site)
 # force FQ phycocyanin to numeric
 talt_filled$FQ_PH <- as.numeric(talt_filled$FQ_PH)
 
-#a <- ggplot(talt_filled, aes(x = Date, y = as.numeric(FQ_chl), color = FQ_ID, group = Date)) +
-#  geom_line() +
-#  geom_point(size = 2) +
-#  facet_wrap(~Site, scales = 'free') +
-#  ylab('FluoroQuick Chl-a') +
-#  labs(color = 'Instrument ID') +
-#  theme_bw() +
-#  ggtitle('FluoroQuik Chl-a')
+a <- ggplot(talt_filled, aes(x = Date, y = as.numeric(FQ_chl), color = FQ_ID, group = Date)) +
+  geom_line() +
+  geom_point(size = 2) +
+  facet_wrap(~Site, scales = 'free') +
+  ylab('FluoroQuick Chl-a') +
+  labs(color = 'Instrument ID') +
+  theme_bw() +
+  ggtitle('FluoroQuik Chl-a')
 
-#b <- ggplot(talt_filled, aes(x = Date, y = as.numeric(FQ_PH), color = FQ_ID, group = Date)) +
-#  geom_line() +
-#  geom_point(size = 2) +
-#  facet_wrap(~Site, scales = 'free') +
-#  ylab('FluoroQuick Phycocyanin') +
-#  labs(color = 'Instrument ID') +
-#  theme_bw() +
-#  ggtitle('FluoroQuik Phycocyanin')
+b <- ggplot(talt_filled, aes(x = Date, y = as.numeric(FQ_PH), color = FQ_ID, group = Date)) +
+  geom_line() +
+  geom_point(size = 2) +
+  facet_wrap(~Site, scales = 'free') +
+  ylab('FluoroQuick Phycocyanin') +
+  labs(color = 'Instrument ID') +
+  theme_bw() +
+  ggtitle('FluoroQuik Phycocyanin')
 
-#p1 <- ggarrange(a, b, common.legend = TRUE,
-#          ncol = 1)
+p1 <- ggarrange(a, b, common.legend = TRUE,
+          ncol = 1)
 
-#ggsave(paste0('./figures/monitoring_data_', Sys.Date(), '.png'),
-#       dpi = 300, width = 7, height = 10)
+ggsave(paste0('./figures/monitoring_data_', Sys.Date(), '.png'),
+       dpi = 300, width = 7, height = 10)
 
 write.csv(talt_filled, 
           paste0('./data/talt_cyano/talt_cyano_formatted_', 
