@@ -34,6 +34,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-r-packages-
       
+      - name: Install dependencies
+        run: |
+          Rscript -e 'pak::pkg_install(c("ggpubr"), upgrade = TRUE, ask = FALSE)'
+    
        # Install dependencies
       - name: Install R dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
