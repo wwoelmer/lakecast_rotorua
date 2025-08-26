@@ -34,9 +34,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-r-packages-
       
-      - name: Install dependencies
-        run: |
-          Rscript -e 'pak::pkg_install(c("ggpubr"), upgrade = TRUE, ask = FALSE)'
+     # - name: Install dependencies
+     #   run: |
+     #     Rscript -e 'pak::pkg_install(c("ggpubr"), upgrade = TRUE, ask = FALSE)'
     
        # Install dependencies
       - name: Install R dependencies
@@ -44,7 +44,6 @@ jobs:
         with:
           extra-packages: |
             tidyverse
-            ggpubr
             readxl
             Microsoft365R
 
