@@ -7,3 +7,5 @@ data/buoy/rotorua_fixed_sensor_data_2008-01-01_2022-05-04.csv
 lakecast_rotorua.Rproj
 token.rds
 token.txt
+token_base64.txt
+onedrive_token_base64.txt
