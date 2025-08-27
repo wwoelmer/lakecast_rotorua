@@ -52,7 +52,5 @@ fl_2 %>%
 colnames(fl_2)
 
 write.csv(fl_2,
-          paste0('./data/boprc_cyano/boprc_cyano_', 
-                 min(fl_2$SampleDate), '_',
-                 max(fl_2$SampleDate), '.csv'),
+          paste0('./data/boprc_cyano/boprc_cyano_latest.csv'),
           row.names = FALSE)
