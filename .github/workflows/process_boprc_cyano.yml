@@ -28,9 +28,18 @@ jobs:
       - name: Detect newly added files
         id: newfiles
         run: |
-          echo "CHANGED_FILES<<EOF" >> $GITHUB_ENV
-          git diff --name-status ${{ github.event.before }} ${{ github.sha }} | grep "^A" | cut -f2- >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+          # List all added files in the push
+          ADDED_FILES=$(git diff-tree --no-commit-id --name-status -r ${{ github.sha }} | awk '$1=="A" {print $2}')
+    
+          if [ -n "$ADDED_FILES" ]; then
+            echo "New files detected:"
+            echo "$ADDED_FILES"
+            echo "CHANGED_FILES<<EOF" >> $GITHUB_ENV
+            echo "$ADDED_FILES" >> $GITHUB_ENV
+            echo "EOF" >> $GITHUB_ENV
+          else
+            echo "No new files added in this push."
+          fi
 
       - name: Run R script if new files exist
         if: env.CHANGED_FILES != ''
