@@ -35,6 +35,20 @@ jobs:
       - name: Run R script if new files exist
         if: env.CHANGED_FILES != ''
         run: |
-          echo "New files detected:"
-          echo "${CHANGED_FILES}"
-          Rscript scripts/workflow/01_process_boprc_data.R "${CHANGED_FILES}"
+
+      - name: Commit and push R script output
+        if: env.CHANGED_FILES != ''
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Add any new or changed files in the boprc cyano folder
+          git add data/boprc_cyano/
+          
+          # Commit if there are changes
+          git diff --cached --quiet || git commit -m "Add processed BOPRC cyano files [skip ci]"
+          
+          # Push back to the default branch
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
