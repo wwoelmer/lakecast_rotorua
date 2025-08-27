@@ -1,0 +1,40 @@
+name: Trigger processing of BOPRC cyano data when new file is added
+
+on:
+  push:
+    paths:
+      - "data/boprc_cyano/og_excel_files**"   # watch everything under data/new_files/
+
+jobs:
+  run-rscript:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: "4.3.3"
+
+      - name: Install dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: |
+            tidyverse
+            readxl
+
+      - name: Detect newly added files
+        id: newfiles
+        run: |
+          echo "CHANGED_FILES<<EOF" >> $GITHUB_ENV
+          git diff --name-status ${{ github.event.before }} ${{ github.sha }} | grep "^A" | cut -f2- >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Run R script if new files exist
+        if: env.CHANGED_FILES != ''
+        run: |
+          echo "New files detected:"
+          echo "${CHANGED_FILES}"
+          Rscript scripts/workflow/01_process_boprc_data.R "${CHANGED_FILES}"
