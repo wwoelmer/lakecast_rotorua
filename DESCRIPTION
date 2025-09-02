@@ -11,6 +11,7 @@ Imports:
     rdrop2,
     readxl,
     Microsoft365R,
-    ggpubr
+    ggpubr,
+    stringr
 Remotes:
     karthik/rdrop2
