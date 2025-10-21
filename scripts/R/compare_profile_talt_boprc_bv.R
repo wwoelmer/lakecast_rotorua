@@ -80,3 +80,4 @@ ggplot(bv_talt, aes(x = toxic_bv, y = talt_value, color = talt_var)) +
   xlab('Log of Toxic Biovolume') +
   ylab('Log of TALT-monitored algal metrics') +
   ggtitle('Relationship between TALT-monitored data and BOPRC Toxic BV')
+
