@@ -24,7 +24,7 @@ bop_biovol <- bop_biovol %>%
 
 ################################################################################
 # read in profiling buoy data
-buoy <- read.csv('./data/buoy/Rotorua_202202-202507_profiles.csv')
+buoy <- read.csv('./data/buoy/rotorua_profiles_latest.csv')
 buoy_daily <- buoy %>% 
   pivot_longer(TmpWtr:FlPhyc, names_to = 'variable', values_to = 'value') %>% 
   mutate(date = as.Date(DateTime)) %>% 
@@ -40,12 +40,20 @@ buoy_daily %>%
   geom_point()
 
 # calculate depth-integrated chl and phyco on each day across water col
+# For var_integrated, what you're doing is adding up each pair of neighboring depths, 
+# then dividing by two to get the average value at that depth interval, 
+# then you multiply by the distance (m) between each depth to standardize, 
+# and add it all up for the integration
+
 buoy_int <- buoy_daily %>% 
   filter(!is.na(value) & !is.na(DptSns)) %>%
   arrange(DptSns) %>%
   group_by(date, variable) %>% 
   summarise(var_integrated = sum(diff(DptSns, na.rm = TRUE) * (head(value, -1) + tail(value, -1)) / 2),
             var_int_avg = var_integrated/max(DptSns))
+
+# Var_integrated is the sum of the depth integrated variable, so for chl fluorescence for example, it would be in units of RFU-m
+# Var_int_avg  is the depth integrated variable, but standardized by the maximum depth, so it returns to units of RFU
 
 ggplot(buoy_int, aes(x = as.Date(date), y = var_integrated)) +
   geom_point() +
@@ -64,11 +72,11 @@ buoy_bv <- buoy_bv %>%
   filter(date > min(buoy_int$date),
          !is.na(variable))
 
-ggplot(buoy_bv, aes(x = log(toxic_bv), y = log(var_integrated), color = variable)) +
+ggplot(buoy_bv, aes(x = log(toxic_bv), y = log(var_int_avg), color = variable)) +
   geom_point() +
   geom_smooth() +
   facet_wrap(~variable + site, scales = 'free', nrow = 2) +
-  ylab('Log of Depth Integrated Total (RFU)') +
+  ylab('Log of Depth Averaged Fluorescence (RFU)') +
   xlab('Log of Toxic Biovolume (mm3/L)') +
   theme_bw() +
   scale_color_manual(values = c('darkgreen', 'cyan3'))
