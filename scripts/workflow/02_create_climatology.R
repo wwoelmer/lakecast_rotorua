@@ -3,23 +3,19 @@
 # OR new file added in that folder with name prefix of boprc_cyano_**
 library(tidyverse)
 
+fcast_year <- 2025 # what year are you forecasting, this is so we can subset to before this year
+
 ########## read in biovolume data
-boprc <- read.csv('./data/boprc_cyano/boprc_cyano_2015-01-07_2025-05-26.csv')
-
-boprc <- boprc %>% 
+boprc <- read.csv('./data/boprc_cyano/boprc_cyano_2015-01-07_2025-05-26.csv')%>% 
   select(Location, Site, SampleDate, PotentiallyToxicBioVolume) %>% 
-  filter(!is.na(PotentiallyToxicBioVolume))
-
-# sum the biovolume on a given site and day (following NERM Cyanobacteria protocol 2024,
-# alert levels are based on the combined total of all cyanobacteria)
-boprc <- boprc %>% 
+  filter(!is.na(PotentiallyToxicBioVolume)) %>% 
   group_by(Site, SampleDate) %>% 
-  summarise(sum_biovolume = sum(PotentiallyToxicBioVolume)) %>% 
+  summarise(sum_biovolume = sum(PotentiallyToxicBioVolume)) %>% # sum the biovolume on a given site and day (following NERM Cyanobacteria protocol 2024, alert levels are based on the combined total of all cyanobacteria)
   mutate(doy = yday(SampleDate), # add week and day of year
          year = year(SampleDate),
          week = week(SampleDate))
 
-ggplot(boprc, aes(x = week, y = sum_biovolume, color = as.factor(year))) +
+ggplot(boprc, aes(x = as.Date(SampleDate), y = sum_biovolume, color = as.factor(year))) +
   geom_point() +
   facet_wrap(~Site) 
 
@@ -42,6 +38,7 @@ ggplot(boprc, aes(x = log_biovolume)) +
 
 ########### calculate mean and std for each week/site
 climatology <- boprc %>% 
+  filter(year < fcast_year) %>% 
   group_by(week, Site) %>% 
   summarise(mu_log = mean(log_biovolume),
             sd_log = sd(log_biovolume),
@@ -55,13 +52,14 @@ ggplot(climatology, aes(x = week, y = mu_log)) +
 
 climatology <- climatology %>% 
   group_by(Site, week) %>% 
-  mutate(lower_CI = exp(qnorm(c(0.05, 0.95), mean = mu_log, sd = sd_log)[1]) - min_val,
-         upper_CI = exp(qnorm(c(0.05, 0.95), mean = mu_log, sd = sd_log)[2]) - min_val,
-         mean_sample = exp(qnorm(c(0.5), mean = mu_log, sd = sd_log)) - min_val)
+  mutate(lower_CI_pred = exp(qnorm(c(0.05, 0.95), mean = mu_log, sd = sd_log)[1]- min_val),
+         upper_CI_pred = exp(qnorm(c(0.05, 0.95), mean = mu_log, sd = sd_log)[2] - min_val),
+         mean_pred = exp(qnorm(c(0.5), mean = mu_log, sd = sd_log)- min_val),
+         sd_pred = exp(sd_log - min_val))
 
-ggplot(climatology, aes(x = week, y = mean_sample)) +
+ggplot(climatology, aes(x = week, y = mean_pred)) +
   geom_point() +
-  geom_ribbon(aes(ymin = lower_CI, ymax = upper_CI), alpha = 0.4) +
+  geom_ribbon(aes(ymin = lower_CI_pred, ymax = upper_CI_pred), alpha = 0.4) +
   facet_wrap(~Site) +
   theme_bw() +
   ylab('Biovolume with 95% CI')
@@ -113,8 +111,12 @@ daily_summary <- warnings %>%
   group_by(Site, week) %>% 
   summarise(total_prob = sum(prob, na.rm = TRUE))
 
+clim_out <- climatology %>% 
+  select(Site, week, mean_pred, sd_pred) %>% 
+  left_join(warnings)
 
-write.csv(warnings, './forecasts/climatology_values_probabilities.csv', row.names = FALSE)
+
+write.csv(clim_out, './forecasts/climatology_values_probabilities.csv', row.names = FALSE)
 #################################################################################
 # produce spatial persistence forecasts at BOPRC using TALT sites
 
