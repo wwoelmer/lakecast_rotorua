@@ -20,7 +20,7 @@ warnings <- data.frame(category = c('green', 'orange', 'red'),
 
 p_bv <- ggplot(boprc, aes(x = as.Date(SampleDate), y = as.numeric(sum_biovolume))) +
   facet_wrap(~factor(Site,
-                     levels = c('Hamurana', 'Ohau Channel', 'Holdens Bay', 'Ngongotaha')), 
+                     levels = c('Hamurana', 'Ohau Channel', 'Ngongotaha', 'Holdens Bay')), 
              scales = 'free') +
   geom_rect(data = warnings, inherit.aes = FALSE,
             aes(ymin = ymin, ymax = ymax, 
@@ -59,6 +59,35 @@ ggsave('./figures/nzfss/biovolume_timeseries_cropped.png',
        p_bv_cropped, width = 250, height = 150, dpi = 300, scale = 0.7,
        unit = 'mm')  
 
+p_bv_week_of_year <- ggplot(boprc, aes(x = week, y = as.numeric(sum_biovolume), color = as.factor(year))) +
+  facet_wrap(~factor(Site,
+                     levels = c('Hamurana', 'Ohau Channel', 'Holdens Bay', 'Ngongotaha')), 
+             scales = 'free') +
+  geom_point() +
+  geom_line() +
+  ylab('Biovolume of Potentially Toxin Producing Species') +
+  xlab('Date') +
+  theme_bw()
+p_bv_week_of_year  
+  
+
+boprc %>% 
+  group_by(Site, week) %>% 
+  summarise(mean_bv = mean(sum_biovolume, na.rm = TRUE),
+            sd = sd(sum_biovolume, na.rm = TRUE)) %>% 
+  ggplot(aes(x = week, y = mean_bv)) +
+  geom_ribbon(aes(ymin = mean_bv - sd, ymax = mean_bv + sd), alpha = 0.4) +
+  facet_wrap(~factor(Site,
+                     levels = c('Hamurana', 'Ohau Channel', 'Ngongotaha', 'Holdens Bay')), 
+             scales = 'free') +
+  geom_point() +
+  geom_line() +
+  ylab('Biovolume of Potentially Toxin Producing Species') +
+  xlab('Date') +
+  theme_bw() 
+
+
+
 a <- ggplot(boprc, aes(x = sum_biovolume)) +
   geom_histogram(fill = 'red') +
   theme_bw() +
@@ -96,3 +125,12 @@ summer_24_25 <- boprc %>%
 ggsave('./figures/nzfss/biovolume_targets_2024-2025.png',
        summer_24_25, width = 250, height = 100, dpi = 300, scale = 0.7,
        unit = 'mm')  
+
+
+# mean and CV of obs at each site
+summer_24_25_stats <- boprc %>% 
+  filter(SampleDate > '2024-10-01') %>%
+  group_by(Site) %>% 
+  summarise(mean = mean(sum_biovolume, na.rm = TRUE),
+            CV = sd(sum_biovolume, na.rm = TRUE)/mean)
+summer_24_25_stats
