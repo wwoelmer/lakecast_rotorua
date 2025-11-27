@@ -2,16 +2,18 @@
 library(tidyverse)
 library(Metrics)
 library(scoringRules)
+library(ggpubr)
 
-fcast_date <- as.Date('2025-01-02') #Sys.Date()
+fcast_date <- as.Date("2024-11-25") #Sys.Date()
 fcast_week <- week(fcast_date)
 fcast_site <- 'Hamurana'
+max_horizon <- 7*27
 
 warnings <- data.frame(category = c('green', 'orange', 'red'),
                        ymin = c(0, 0.5, 10),
                        ymax = c(0.5, 10, Inf))
 
-fcast_df <- data.frame(fcast_date = seq.Date(fcast_date, fcast_date + max_horizon - 1, by = 'day'))
+fcast_df <- data.frame(fcast_date = seq.Date(fcast_date, fcast_date + max_horizon - 1, by = 'week'))
 
 fcast_df <- fcast_df %>% 
   mutate(week = week(fcast_date))
@@ -34,17 +36,48 @@ p1 <- ggplot(fcast_df, aes(x = fcast_date, y = mean_pred)) +
   geom_ribbon(aes(ymin = mean_pred - sd_pred, ymax = mean_pred + sd_pred),
               alpha = 0.3) +
   xlab('Date') +
-  ylab('Climatology Forecasted Biovolume (UNITS)') +
+  ylab(expression(paste("Forecasted Biovolume (mm"^3, " ", L^-1, ")"))) +
   theme_bw() +
   coord_cartesian(ylim = c(0, NA)) +  # lower limit = 0, upper limit = auto
   labs(fill = 'Warning Level') +
-  facet_wrap(~Site) +
-  guides(alpha = 'none') +
+  facet_wrap(~factor(Site,
+                     levels = c('Hamurana', 'Ohau Channel', 
+                                'Ngongotaha', 'Holdens Bay'))) +  guides(alpha = 'none') +
   ggtitle('Climatology forecast at BOPRC sites')
 p1
 
+ggsave('./figures/nzfss/climatology/climatology_forecast_24-25.png',
+       p1, width = 250, height = 150, dpi = 300, scale = 0.7,
+       unit = 'mm')   
+
+
+p1_nouncert <- ggplot(fcast_df, aes(x = fcast_date, y = mean_pred)) +
+  geom_rect(data = warnings, inherit.aes = FALSE,
+            aes(ymin = ymin, ymax = ymax, 
+                xmin = min(fcast_df$fcast_date), xmax = max(fcast_df$fcast_date),
+                fill = category,
+                alpha = 0.2)) +
+  scale_fill_manual(values = c('green', 'orange', 'red')) +
+  geom_point() +
+ # geom_ribbon(aes(ymin = mean_pred - sd_pred, ymax = mean_pred + sd_pred),
+#              alpha = 0.3) +
+  xlab('Date') +
+  ylab(expression(paste("Forecasted Biovolume (mm"^3, " ", L^-1, ")"))) +
+  theme_bw() +
+  coord_cartesian(ylim = c(0, NA)) +  # lower limit = 0, upper limit = auto
+  labs(fill = 'Warning Level') +
+  facet_wrap(~factor(Site,
+                     levels = c('Hamurana', 'Ohau Channel', 
+                                'Ngongotaha', 'Holdens Bay'))) +  guides(alpha = 'none') +
+  guides(alpha = 'none') +
+  ggtitle('Climatology forecast at BOPRC sites')
+
+ggsave('./figures/nzfss/climatology/climatology_forecast_nouncertainty_24-25.png',
+       p1_nouncert, width = 250, height = 150, dpi = 300, scale = 0.7,
+       unit = 'mm')   
+
 p2 <- ggplot(fcast_df, aes(x = fcast_date, y = prob, fill = warnings)) +
-  geom_col(position = 'stack') +
+  geom_area(position = "stack", alpha = 0.6) +
   scale_fill_manual(values = c('green', 'orange', 'red')) +
   xlab('Date') +
   ylab('Climatology Forecasted Likeilhood of Warnings') +
@@ -56,6 +89,10 @@ p2 <- ggplot(fcast_df, aes(x = fcast_date, y = prob, fill = warnings)) +
   ggtitle('Climatology forecast at BOPRC sites')
 p2
 
+ggsave('./figures/nzfss/climatology/climatology_forecast__probabilities_24-25.png',
+       p2, width = 250, height = 150, dpi = 300, scale = 0.7,
+       unit = 'mm')   
+
 # bring on observations to assess with data
 fcast_tgt <- read.csv('./data/boprc_cyano/boprc_cyano_2015-01-07_2025-05-26.csv') %>% 
   select(Location, Site, SampleDate, PotentiallyToxicBioVolume) %>% 
@@ -64,9 +101,7 @@ fcast_tgt <- read.csv('./data/boprc_cyano/boprc_cyano_2015-01-07_2025-05-26.csv'
   summarise(sum_biovolume = sum(PotentiallyToxicBioVolume)) %>% 
   mutate(doy = yday(SampleDate), # add week and day of year
          year = year(SampleDate),
-         week = week(SampleDate)) %>% 
-  filter(year >= fcast_year)
-
+         week = week(SampleDate))
 
 # one dataframe for continuous 
 fcast_con <- fcast_df %>% 
