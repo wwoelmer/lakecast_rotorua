@@ -1,7 +1,11 @@
 library(ggpubr)
 library(tidyverse)
 
-talt <- read.csv('./data/talt_cyano/og_csv_files/LakeCast_data_digitized(2025).csv') 
+url <- 'https://docs.google.com/spreadsheets/d/1GPNLRdMJmfWd4c8rS2WneGTQpzIWs9IzB7YbruZSQFw/edit?usp=sharing'
+
+talt <- read_sheet(url, col_types = 'c')
+
+#talt <- read.csv('./data/talt_cyano/og_csv_files/LakeCast_data_digitized(2025).csv') 
 
 talt$Date <- as.Date(dmy(talt$Date))
 
@@ -35,7 +39,7 @@ talt_filled <- talt_filled %>%
 # there are some rows with no data at all, look across several columns to filter these rows
 talt_filled <- talt_filled %>% 
   group_by(Date) %>% 
-  filter(!is.na(FQ_PH) & !is.na(FQ_chl) & !is.na(CF_PH) & !is.na(CF_chl))
+  filter(!is.na(FQ_PH) & !is.na(FQ_chl))
 
 # format some columns
 talt_filled$Date <- as.Date(talt_filled$Date, format = "%d/%m/%Y")
