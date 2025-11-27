@@ -29,21 +29,9 @@ scores <- clim_obs %>%
                               sd = log(sd_pred)), # in log units
             rmse = sqrt(mean((mean_pred - sum_biovolume)^2, na.rm = TRUE)) ) 
 
-scores$Site <- factor(scores$Site, levels = c('Hamurana', 'Ohau Channel', 'Holdens Bay', 'Ngongotaha'))
+scores$Site <- factor(scores$Site, levels = c('Hamurana', 'Ohau Channel', 'Ngongotaha', 'Holdens Bay'))
 
 ggplot(scores, aes(x = as.Date(date), y = crps)) +
-  geom_point() +
-  facet_wrap(~Site) +
-  theme_bw() +
-  ggtitle('Climatology scores')
-
-# dataframe of warning levels for plotting
-warnings <- data.frame(category = c('green', 'orange', 'red'),
-                       ymin = c(0, 0.5, 10),
-                       ymax = c(0.5, 10, Inf))
-
-
-clim_scores <- ggplot(scores, aes(x = as.Date(date), y = rmse)) +
   facet_wrap(~Site) +
   theme_bw() +
   geom_rect(data = warnings, inherit.aes = FALSE,
@@ -58,6 +46,24 @@ clim_scores <- ggplot(scores, aes(x = as.Date(date), y = rmse)) +
   scale_fill_manual(values = c('green', 'orange', 'red'),
                     name = 'Warning Level') +
   xlab('Date') +
+  ylab(expression(paste("CRPS (mm"^3, " ", L^-1, ")")))
+
+
+# dataframe of warning levels for plotting
+warnings <- data.frame(category = c('green', 'orange', 'red'),
+                       ymin = c(0, 0.5, 10),
+                       ymax = c(0.5, 10, Inf))
+
+
+clim_scores <- ggplot(scores, aes(x = as.Date(date), y = rmse)) +
+  facet_wrap(~factor(Site, 
+                     levels = c('Hamurana', 'Ohau Channel', 'Ngongotaha', 'Holdens Bay'))) +
+  theme_bw() +
+  ggtitle('Climatology scores') +
+  geom_point() +
+  geom_line() +
+  guides(alpha = 'none') +
+  xlab('Date') +
   ylab(expression(paste("RMSE (mm"^3, " ", L^-1, ")")))
 
 ggsave('./figures/nzfss/RMSE_climatology_24-25.png',
@@ -68,6 +74,8 @@ scores %>%
   group_by(Site) %>% 
   summarise(mean_crps = mean(crps, na.rm = TRUE),
             mean_rmse = mean(rmse, na.rm = TRUE))
+
+
 
 obs_bv <- ggplot(clim_obs, aes(x = as.Date(date), y = sum_biovolume)) +
   facet_wrap(~factor(Site, 
