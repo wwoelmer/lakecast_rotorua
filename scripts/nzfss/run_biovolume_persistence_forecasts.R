@@ -13,7 +13,7 @@ h_weeks = 4
 start <- as.Date('2024-12-02')
 
 ## for 2025 forecasts 
-forecast_dates <- targets$date[targets$date > as.Date("2024-11-25")]
+forecast_dates <- targets$date[targets$date >= as.Date("2024-11-25")]
 forecast_dates <- unique(forecast_dates)
 
 forecast_sites <- expand.grid(start = forecast_dates) %>%
@@ -46,24 +46,24 @@ ggplot(RW_forecast_summary, aes(x = forecast_date, y = median_pred)) +
   geom_line(color = "blue") +
   geom_point(aes(x = forecast_date, y = median_pred, color = Site)) +
  # geom_point(data = last_obs, aes(x = as.Date(date), y = sum_biovolume)) +
-  facet_wrap(Site~horizon_label) +
+  facet_wrap(Site~horizon_label, scales = 'free') +
   labs(x = "Date", y = "Biovolume") +
   theme_bw()
 
 
 last_obs <- targets %>% 
   group_by(Site) %>% 
-  filter(as.Date(date) <= forecast_dates[2]) %>% 
+  filter(as.Date(date) == forecast_dates[1]) %>% 
   slice_tail(n = 3) %>% 
   select(Site, date, sum_biovolume) 
 
 RW_forecast_summary %>% 
-  filter(start_time==forecast_dates[2]) %>% 
+  filter(start_time==forecast_dates[1]) %>% 
   ggplot(aes(x = forecast_date, y = median_pred)) +
   geom_ribbon(aes(ymin = lower_95, ymax = upper_95, fill = Site), alpha = 0.2) +
   geom_line(color = "blue") +
   geom_point(aes(x = forecast_date, y = median_pred, color = Site)) +
-  geom_vline(xintercept = forecast_dates[2]) +
+  geom_vline(xintercept = forecast_dates[1]) +
   geom_point(data = last_obs, aes(x = as.Date(date), y = sum_biovolume)) +
   facet_wrap(~Site) +
   labs(x = "Date", y = "Biovolume") +
@@ -101,11 +101,24 @@ ggplot(scores, aes(x = forecast_date, y = crps, color = as.factor(horizon))) +
   theme_bw() +
   ggtitle('Temporal persistence scores')
 
-scores %>% 
+ggplot(scores, aes(x = forecast_date, y = crps, color = as.factor(horizon))) +
+  geom_point() +
+  facet_wrap(horizon~Site) +
+  theme_bw() +
+  ggtitle('Temporal persistence scores')
+
+summary_scores <- scores %>% 
   group_by(Site, horizon) %>% 
   summarise(mean_crps = mean(crps, na.rm = TRUE),
             mean_rmse = mean(rmse, na.rm = TRUE)) %>% 
   arrange(horizon)
+
+
+ggplot(summary_scores, aes(x = horizon, y = mean_rmse)) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(~Site) +
+  theme_bw()
 
 scores %>% 
   group_by(Site, horizon) %>% 
