@@ -3,7 +3,8 @@ library(tidyverse)
 
 tp <- read.csv('./output/temporal_persistence_forecast_scores.csv') %>% 
   mutate(model = 'temporal persistence') %>% 
-  filter(horizon==7)
+  filter(horizon==1) %>% 
+  rename(forecast_date = date)
 
 clim <- read.csv('./output/climatology_forecast_scores.csv') %>% 
   mutate(model = 'climatology') %>% 
@@ -17,10 +18,37 @@ scores <- full_join(tp, clim)
 scores <- full_join(scores, buoy)
 
 
+p <- ggplot(scores, aes(x = as.Date(forecast_date), y = rmse, color = model)) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(~factor(Site, 
+                     levels = c('Hamurana', 'Ohau Channel',
+                                'Ngongotaha', 'Holdens Bay'))) +
+  theme_bw() +
+  scale_color_manual(values = c('#0072B2',
+                                '#E69F00',
+                                '#F8766D')) +
+  ylab(expression(paste("RMSE (mm"^3, " ", L^-1, ")"))) +
+  xlab('Date') 
+
+
+ggsave('./figures/nzfss/compare_all_models_RMSE.png', p,
+       width = 250, height = 150, dpi = 300, scale = 0.7,
+       unit = 'mm')
+
 ggplot(scores, aes(x = as.Date(forecast_date), y = rmse, color = model)) +
   geom_point() +
-  facet_wrap(~Site) +
-  theme_bw()
+  geom_line() +
+  facet_wrap(~factor(Site, 
+                     levels = c('Hamurana', 'Ohau Channel',
+                                'Ngongotaha', 'Holdens Bay'))) +
+  theme_bw() +
+  scale_color_manual(values = c('#0072B2',
+                                '#E69F00',
+                                '#F8766D')) +
+  ylab(expression(paste("RMSE (mm"^3, " ", L^-1, ")"))) +
+  xlab('Date') +
+  xlim(as.Date(min(scores$forecast_date), as.Date('2025-01-15')))
 
 summary <- scores %>% 
   group_by(Site, model) %>% 
