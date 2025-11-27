@@ -45,10 +45,26 @@ climatology <- boprc %>%
             n_obs = n()) %>% 
   filter(n_obs > 2) # only consider weeks with more than 2 obs
 
-ggplot(climatology, aes(x = week, y = mu_log)) +
+# create a 'summer week' index so it starts with the november sampling
+first_summer_week <- min(climatology$week[climatology$week > 30], na.rm = TRUE)
+
+climatology <- climatology %>% 
+  mutate(summer_week = ifelse(week >= first_summer_week,
+                              week - first_summer_week + 1,
+                              week + (52 - first_summer_week + 1)))
+
+p <- ggplot(climatology, aes(x = summer_week, y = mu_log)) +
   geom_point() +
   geom_errorbar(aes(ymin = mu_log - sd_log, ymax = mu_log + sd_log), width = 0.5) +
-  facet_wrap(~Site)
+  facet_wrap(~factor(Site, levels = c('Hamurana', 'Ohau Channel',
+                                      'Ngongotaha', 'Holdens Bay'))) +
+  theme_bw() +
+  xlab('Summer week') +
+  ylab(expression(paste("Mean Log Biovolume (mm"^3, " ", L^-1, ")")))
+p
+ggsave('./figures/nzfss/climatology_mean_sd.png',
+       p, width = 250, height = 150, dpi = 300, scale = 0.7,
+       unit = 'mm')  
 
 climatology <- climatology %>% 
   group_by(Site, week) %>% 
