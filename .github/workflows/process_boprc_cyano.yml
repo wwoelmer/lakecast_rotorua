@@ -44,6 +44,7 @@ jobs:
       - name: Run R script if new files exist
         if: env.CHANGED_FILES != ''
         run: |
+          Rscript scripts/01_process_boprc_data.R
 
       - name: Commit and push R script output
         if: env.CHANGED_FILES != ''
