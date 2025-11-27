@@ -1,5 +1,6 @@
 library(tidyverse)
 library(ggpubr)
+library(scoringRules)
 
 # read in targets
 targets <- read.csv('./data/biovolume_targets.csv')
@@ -83,102 +84,31 @@ buoy_bv <- left_join(targets, buoy_wide)
 buoy_bv <- buoy_bv %>% 
   filter(date > min(buoy_int$date))
 
-ggplot(buoy_bv, aes(x = log(sum_biovolume), y = log(phyco_RFU_int_avg))) +
+p1 <- ggplot(buoy_bv, aes(x = log(sum_biovolume), y = log(phyco_RFU_int_avg))) +
   geom_point() +
   geom_smooth(method = 'lm') +
-  facet_wrap(~Site) +
+  facet_wrap(~factor(Site,
+                     levels = c('Hamurana', 'Ohau Channel',
+                                'Ngongotaha', 'Holdens Bay'))) +
   ylab('Log of Depth Averaged Fluorescence (RFU)') +
   xlab('Log of Toxic Biovolume (mm3/L)') +
   theme_bw() 
+
+ggsave('./figures/nzfss/bv_phyco_relationship.png',
+       p1, width = 250, height = 200, dpi = 300, scale = 0.6,
+       unit = 'mm')  
 
 # clean up some columns 
 buoy_bv <- buoy_bv %>% 
   select(Site, date, sum_biovolume, chl_RFU_int_avg, phyco_RFU_int_avg, lag1_phyco:lag7_chl)
 
-# test the function
-data <- buoy_bv
-fcast_start <- '2025-04-02'
-horizon <- 1
-fcast_site <- 'Hamurana'
-lag <- 1
 
 #### function stuff
-
-fit_buoy_bv <- function(data, # dataset with bv and lagged buoy int
-                        fcast_start, # start date of forecast (e.g., present day)
-                        horizon = 1, # how many weeks ahead you want to predict
-                        variable = 'phyco', # which variable, phyco or chl
-                        fcast_site, # which site to forecast
-                        lag = 1, # which lag to make the forecast with, default is 1 day before bv measurement
-                        min_val = 0.001 # minimum amount to add before logging
-                        ){ 
-  
-      # subset data 
-      df_train <- data %>% 
-        filter(date < fcast_start,
-               Site==fcast_site)
-      
-      # select the variable, and rename it as generic
-      driver_col <- c('lag1_phyco', 'lag1_chl',
-                      'lag6_phyco', 'lag6_chl') #paste0('lag', lag, '_', variable)
-      df_train <- df_train %>% 
-        select(date, Site, sum_biovolume, all_of(driver_col)) #%>% 
-        #rename(driver = all_of(driver_col))
-      
-      #log it
-      df_train <- df_train %>% 
-        mutate(log_biovolume = log(sum_biovolume + min_val),
-               log_lag1_phyco = log(lag1_phyco + min_val),
-               log_lag1_chl = log(lag1_chl + min_val),
-               log_lag6_phyco = log(lag6_phyco + min_val),
-               log_lag6_chl = log(lag6_chl + min_val))
-               #log_driver = log(driver + min_val))
-      
-      df_train <- df_train %>% 
-        filter(!is.na(log_biovolume))
-      
-      ggplot(df_train, aes(x = as.Date(date), y = log_biovolume, color = 'biovol')) +
-        geom_point() +
-        geom_point(aes(x = date, y = log_lag1_chl, color = 'buoy')) +
-        facet_wrap(~Site)
-      
-      # fit the model on all training data
-      fit <- lm(log_biovolume ~ log_lag6_phyco + log_lag6_chl, data = df_train) #lm(as.formula(paste("log_biovolume ~ log_driver")), data = df_train)
-      summary(fit)
-      
-      newdata <- data %>% 
-        filter(date==fcast_start,
-               Site==fcast_site) %>% 
-        select(date, sum_biovolume, lag1_phyco, lag1_chl) %>% 
-        mutate(log_biovolume = log(sum_biovolume + min_val),
-               log_lag1_phyco = log(lag1_phyco + min_val),
-               log_lag1_chl = log(lag1_chl + min_val))
-      
-      
-      # run the model with new data
-      pred <- predict(fit, newdata = newdata)
-      
-      # get observations
-      obs <- data %>% 
-        filter(date==fcast_start,
-               Site==fcast_site) %>% 
-        pull(sum_biovolume)
-      
-      # format output  
-      tibble(date = fcast_start,
-             Site = fcast_site,
-             days_lag = lag,
-             buoy_phyco_lag = newdata$lag1_phyco,
-             buoy_chl_lag = newdata$lag1_chl,
-             pred_bv_native = exp(pred - 0.001), # back-transform
-             observed_bv = obs)  
-  
-}
-
+source('scripts/functions/fit_buoy_bv.R')
 
 dates <- seq.Date(as.Date('2024-11-25'), as.Date('2025-05-21'), by = 'week')
 dates <- unique(buoy_bv$date)
-dates <- dates[dates > as.Date('2024-11-25')]
+dates <- dates[dates >= as.Date('2024-11-25')]
 
 sites <- unique(buoy_bv$Site)
 out <- data.frame()
@@ -195,19 +125,82 @@ for(i in 1:length(dates)){
   }
 }
 
-ggplot(out, aes(x = date, y = pred_bv_native, color = 'pred')) +
+p <- ggplot(out, aes(x = date, y = pred_bv_native, color = 'Buoy predicted')) +
   geom_point() +
   geom_line() +
+  #geom_ribbon(aes(ymin = pred_lower, ymax = pred_upper), fill = "skyblue", alpha = 0.3) +
+  geom_point(aes(x = date, y = observed_bv, color = 'Obs Biovolume')) +
+  geom_line(aes(x = date, y = observed_bv, color = 'Obs Biovolume')) +
+  facet_wrap(~factor(Site,
+                     levels = c('Hamurana', 'Ohau Channel',
+                                'Ngongotaha', 'Holdens Bay'))) +
+  scale_color_manual(values = c('#0072B2', 'red')) +
+  theme_bw() +
+  labs(color = NULL) +
+  ylab(expression(paste("Potentially Toxic Biovolume (mm"^3, " ", L^-1, ")"))) 
+p  
+ggsave('./figures/nzfss/buoy_obs_bv_comparison.png', p,
+       width = 250, height = 150, dpi = 300, scale = 0.7,
+       unit = 'mm')
+
+# look at just during the bloomy times
+out %>% 
+  filter(date < '2025-01-15') %>% 
+  ggplot(aes(x = date, y = pred_bv_native, color = 'pred')) +
+  geom_point() +
+  geom_line() +
+  #geom_ribbon(aes(ymin = pred_lower, ymax = pred_upper), fill = "skyblue", alpha = 0.3) +
   geom_point(aes(x = date, y = observed_bv, color = 'obs')) +
   geom_line(aes(x = date, y = observed_bv, color = 'obs')) +
-  facet_wrap(~Site) +
+  facet_wrap(~factor(Site,
+                     levels = c('Hamurana', 'Ohau Channel',
+                                'Ngongotaha', 'Holdens Bay'))) +
   theme_bw()
+
+# make a gif 
+for(i in 1:length(dates)){
+  # look at a few days at a time around peak bloom dynamics
+  out_sub <- out %>% 
+    filter(as.Date(date)<=dates[i]) %>% 
+    group_by(date, Site) %>% 
+    mutate(diff_btw_buoy_shore = observed_bv - pred_bv_native)
+  
+  p <- ggplot(out_sub) +
+      geom_point(aes(x = date, y = diff_btw_buoy_shore)) +
+      geom_line(aes(x = date, y = diff_btw_buoy_shore)) +
+      facet_wrap(~factor(Site,
+                         levels = c('Hamurana', 'Ohau Channel',
+                                    'Ngongotaha', 'Holdens Bay'))) +
+      theme_bw() 
+  p
+  ggsave(paste0("./figures/nzfss/biovolume_frames/biovolume_",dates[i], ".png"), p,
+         width = 250, height = 150, dpi = 300, scale = 0.7,
+         unit = 'mm')
+  
+
+}
+
+# Combine into an animated GIF
+frames <- list.files("./figures/nzfss/biovolume_frames", full.names = TRUE, pattern = "*.png")
+frames <- frames[order(frames)]  # Ensure correct order
+img_list <- image_read(frames)
+img_gif <- image_animate(img_list, fps = 1)  # adjust fps for speed
+image_write(img_gif, "./figures/nzfss/biovolume_animation.gif")
+image_write_video(img_list, path = "./figures/nzfss/biovolume_animation.mp4",
+                  framerate = 1)
+
 
 out <- out %>% 
   group_by(Site, date) %>% 
-  mutate(rmse = sqrt(mean((pred_bv_native - observed_bv)^2, na.rm = TRUE)))
+  mutate(rmse = sqrt(mean((pred_bv_native - observed_bv)^2, na.rm = TRUE)),
+         sd_est = (pred_upper - pred_lower)/(2*1.96),
+         crps = crps_norm(y = observed_bv, mean = pred_bv_native, sd = sd_est))
 
 ggplot(out, aes(x = date, y = rmse)) +
+  geom_point() +
+  facet_wrap(~Site)
+
+ggplot(out, aes(x = date, y = crps)) +
   geom_point() +
   facet_wrap(~Site)
 
