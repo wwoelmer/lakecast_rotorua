@@ -3,7 +3,7 @@ name: Trigger processing of BOPRC cyano data when new file is added
 on:
   push:
     paths:
-      - "data/boprc_cyano/og_excel_files**"   # watch everything under data/new_files/
+      - "data/boprc_cyano/og_excel_files/**"   # watch everything under data/new_files/
 
 jobs:
   run-rscript:
@@ -24,41 +24,22 @@ jobs:
           extra-packages: |
             tidyverse
             readxl
-
-      - name: Detect newly added files
-        id: newfiles
-        run: |
-          # List all added files in the push
-          ADDED_FILES=$(git diff-tree --no-commit-id --name-status -r ${{ github.sha }} | awk '$1=="A" {print $2}')
-    
-          if [ -n "$ADDED_FILES" ]; then
-            echo "New files detected:"
-            echo "$ADDED_FILES"
-            echo "CHANGED_FILES<<EOF" >> $GITHUB_ENV
-            echo "$ADDED_FILES" >> $GITHUB_ENV
-            echo "EOF" >> $GITHUB_ENV
-          else
-            echo "No new files added in this push."
-          fi
-
+     
       - name: Run R script if new files exist
         if: env.CHANGED_FILES != ''
         run: |
           Rscript scripts/workflow/01_process_boprc_data.R
 
-      - name: Commit and push R script output
-        if: env.CHANGED_FILES != ''
+      - name: Show folder contents
+        run: ls -R .
+
+      - name: Commit and push output
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
-          # Add any new or changed files in the boprc cyano folder
-          git add data/boprc_cyano/
-          
-          # Commit if there are changes
-          git diff --cached --quiet || git commit -m "Add processed BOPRC cyano files [skip ci]"
-          
-          # Push back to the default branch
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+          git add -A
+          git diff --cached --quiet || git commit -m "Processed BOPRC cyano data [skip ci]"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
