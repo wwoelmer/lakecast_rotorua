@@ -1,5 +1,8 @@
 name: Trigger processing of BOPRC cyano data when file is added or modified
 
+permissions:
+  contents: write
+
 on:
   push:
     paths:
