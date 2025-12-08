@@ -8,6 +8,9 @@ dir <- 'data/boprc_cyano/og_excel_files'
 fls <- list.files(dir)
 fls
 
+print(list.files("data/boprc_cyano/og_excel_files"))
+print(list.files("data/boprc_cyano/og_csv"))
+
 fl_1 <- read_excel(paste0(dir, "/", fls[1])) %>% 
   filter(Location=='Rotorua') %>% 
   select(-SampleId)
@@ -37,20 +40,8 @@ fl_2 <- full_join(hist, fl_1)
 fl_2 <- fl_2 %>% 
   separate(Species, into = c('genus', 'species'), sep = " ")
 
-fl_2 %>% 
-  filter(genus %in% c('Aphanocapsa', 'Dolichospermum', 'Microcystis', 'Pseudanabaena')) %>% 
-  ggplot(aes(x = as.Date(SampleDate), y = TotalBioVolume, color = genus)) +
-  geom_point() +
-  facet_wrap(~Site, scales = 'free')
-
-fl_2 %>% 
-  filter(genus %in% c('Aphanocapsa', 'Dolichospermum', 'Microcystis', 'Pseudanabaena')) %>% 
-  ggplot(aes(x = as.Date(SampleDate), y = CellsPerMl, color = genus)) +
-  geom_point() +
-  facet_wrap(~Site) 
-
-colnames(fl_2)
-
 write.csv(fl_2,
           paste0('./data/boprc_cyano/boprc_cyano_latest.csv'),
           row.names = FALSE)
+
+print(paste("Wrote:", output_path))
