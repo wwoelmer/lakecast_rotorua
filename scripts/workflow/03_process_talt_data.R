@@ -1,17 +1,12 @@
-#install.packages("Microsoft365R")
-library(Microsoft365R)
-library(readxl)
 library(ggpubr)
 library(tidyverse)
+library(googlesheets4)
 
-token <- readRDS("token_onedrive.rds")
-onedrive <- get_business_onedrive(token = token)
+url <- 'https://docs.google.com/spreadsheets/d/1GPNLRdMJmfWd4c8rS2WneGTQpzIWs9IzB7YbruZSQFw/edit?usp=sharing'
 
-onedrive$download_file("Documents/U of Waikato/MBIE Smart Ideas Forecasting 2024/QuickFluor/LakeCast_data_digitized.xlsx", 
-                       dest = "./data/talt_cyano/talt_cyano_digitized.xlsx",
-                       overwrite = TRUE)
+talt <- read_sheet(url, col_types = 'c')
 
-talt <- read_excel('./data/talt_cyano/talt_cyano_digitized.xlsx') 
+#talt <- read.csv('./data/talt_cyano/og_csv_files/LakeCast_data_digitized(2025).csv') 
 
 talt$Date <- as.Date(dmy(talt$Date))
 
@@ -44,9 +39,9 @@ talt_filled <- talt_filled %>%
 
 # there are some rows with no data at all, look across several columns to filter these rows
 talt_filled <- talt_filled %>% 
-  group_by(Date, Site) %>% 
-  filter(!if_all(c(FQ_chl, CF_chl, chl_RFU, maramataka), is.na))
-  
+  group_by(Date) %>% 
+  filter(!is.na(FQ_PH) & !is.na(FQ_chl))
+
 # format some columns
 talt_filled$Date <- as.Date(talt_filled$Date, format = "%d/%m/%Y")
 talt_filled$FQ_ratio <- as.numeric(talt_filled$FQ_ratio)
@@ -60,34 +55,9 @@ talt_filled$Site <- trimws(talt_filled$Site)
 # force FQ phycocyanin to numeric
 talt_filled$FQ_PH <- as.numeric(talt_filled$FQ_PH)
 
-a <- ggplot(talt_filled, aes(x = Date, y = as.numeric(FQ_chl), color = FQ_ID, group = Date)) +
-  geom_line() +
-  geom_point(size = 2) +
-  facet_wrap(~Site, scales = 'free') +
-  ylab('FluoroQuick Chl-a') +
-  labs(color = 'Instrument ID') +
-  theme_bw() +
-  ggtitle('FluoroQuik Chl-a')
-
-b <- ggplot(talt_filled, aes(x = Date, y = as.numeric(FQ_PH), color = FQ_ID, group = Date)) +
-  geom_line() +
-  geom_point(size = 2) +
-  facet_wrap(~Site, scales = 'free') +
-  ylab('FluoroQuick Phycocyanin') +
-  labs(color = 'Instrument ID') +
-  theme_bw() +
-  ggtitle('FluoroQuik Phycocyanin')
-
-p1 <- ggarrange(a, b, common.legend = TRUE,
-          ncol = 1)
-
-ggsave(paste0('./figures/monitoring_data_', Sys.Date(), '.png'),
-       dpi = 300, width = 7, height = 10)
-
 write.csv(talt_filled, 
           paste0('./data/talt_cyano/talt_cyano_formatted_', 
                  min(talt_filled$Date), '_',
                  max(talt_filled$Date), '.csv'),
           row.names = FALSE)
 
-##### read in climatology
