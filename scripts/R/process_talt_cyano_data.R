@@ -1,5 +1,6 @@
 library(ggpubr)
 library(tidyverse)
+library(googlesheets4)
 
 url <- 'https://docs.google.com/spreadsheets/d/1GPNLRdMJmfWd4c8rS2WneGTQpzIWs9IzB7YbruZSQFw/edit?usp=sharing'
 
@@ -59,6 +60,10 @@ write.csv(talt_filled,
                  min(talt_filled$Date), '_',
                  max(talt_filled$Date), '.csv'),
           row.names = FALSE)
+
+t <- talt_filled %>% 
+  group_by(Site, Date, FQ_ID) %>% 
+  summarise(n = n())
 
 ggplot(talt_filled, aes(x = Date, y = as.numeric(FQ_chl), color = FQ_ID)) +
   geom_line() +
