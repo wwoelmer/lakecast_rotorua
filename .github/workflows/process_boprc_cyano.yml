@@ -3,7 +3,7 @@ name: Trigger processing of BOPRC cyano data when new file is added
 on:
   push:
     paths:
-      - "data/boprc_cyano/og_excel_files/**"   # watch everything under data/new_files/
+      - "data/boprc_cyano/og_excel_files/**"
 
 jobs:
   run-rscript:
@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Set up R
         uses: r-lib/actions/setup-r@v2
@@ -24,12 +26,24 @@ jobs:
           extra-packages: |
             tidyverse
             readxl
- 
+
+      - name: Detect new or modified files
+        id: detect
+        run: |
+          CHANGED=$(git diff --name-status HEAD~1 HEAD | awk '$1=="A" || $1=="M"{print $2}')
+          if [[ "$CHANGED" == *"data/boprc_cyano/og_excel_files/"* ]]; then
+            echo "run_script=true" >> $GITHUB_ENV
+          else
+            echo "run_script=false" >> $GITHUB_ENV
+          fi
+
       - name: Run processing script
+        if: env.run_script == 'true'
         run: |
           Rscript scripts/workflow/01_process_boprc_data.R
 
       - name: Commit and push processed output
+        if: env.run_script == 'true'
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
