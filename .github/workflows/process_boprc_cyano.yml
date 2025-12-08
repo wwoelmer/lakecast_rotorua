@@ -24,22 +24,20 @@ jobs:
           extra-packages: |
             tidyverse
             readxl
-     
-      - name: Run R script if new files exist
-        if: env.CHANGED_FILES != ''
+ 
+      - name: Run processing script
         run: |
           Rscript scripts/workflow/01_process_boprc_data.R
 
-      - name: Show folder contents
-        run: ls -R .
-
-      - name: Commit and push output
+      - name: Commit and push processed output
         run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          git add -A
-          git diff --cached --quiet || git commit -m "Processed BOPRC cyano data [skip ci]"
+          git add data/boprc_cyano/
+
+          git diff --cached --quiet || git commit -m "Update processed BOPRC cyano dataset [skip ci]"
+
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
