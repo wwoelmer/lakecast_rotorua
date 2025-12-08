@@ -8,9 +8,6 @@ dir <- 'data/boprc_cyano/og_excel_files'
 fls <- list.files(dir)
 fls
 
-print(list.files("data/boprc_cyano/og_excel_files"))
-print(list.files("data/boprc_cyano/og_csv"))
-
 fl_1 <- read_excel(paste0(dir, "/", fls[1])) %>% 
   filter(Location=='Rotorua') %>% 
   select(-SampleId)
@@ -24,10 +21,6 @@ for(i in 2:length(fls)){
 }
 
 fl_1$SampleDate <- as.Date(fl_1$SampleDate, format = "%d/%m/%Y")
-
-ggplot(fl_1, aes(x = as.Date(SampleDate), y = TotalBioVolume, color = Species)) +
-  geom_point() +
-  facet_wrap(~Site)
 
 hist <- read.csv('./data/boprc_cyano/og_csv/Cyanobacteria_Data_Whitney_Dec_2024.csv') %>% 
   filter(Location=='Rotorua') %>% 
