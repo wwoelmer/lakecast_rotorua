@@ -44,4 +44,3 @@ write.csv(fl_2,
           paste0('./data/boprc_cyano/boprc_cyano_latest.csv'),
           row.names = FALSE)
 
-print(paste("Wrote:", output_path))
