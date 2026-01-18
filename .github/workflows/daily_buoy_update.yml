@@ -2,11 +2,12 @@ name: Daily Buoy Update
 
 permissions:
   contents: write
-  
-on:
-  schedule:
-    - cron: "0 17 * * *"  # runs every day at 00:00 UTC
-  workflow_dispatch:      # allows manual runs
+
+# Disable workflow trigger  
+#on:
+#  schedule:
+#    - cron: "0 17 * * *"  # runs every day at 00:00 UTC
+#  workflow_dispatch:      # allows manual runs
 
 jobs:
   update-data:
