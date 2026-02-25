@@ -2601,6 +2601,67 @@
 "Rotorua","Hamurana",2015-01-07,"20A","whole plate","Chroococcus","minutus",FALSE,10,8,NA,1.6,0.000352,NA,NA,""
 "Rotorua","Ngongotaha",2015-01-07,"20A","whole plate","Dolichospermum","affine",TRUE,10,72,NA,14.4,2.736e-05,14.4,2.736e-05,""
 "Rotorua","Ngongotaha",2015-01-07,"20A","whole plate","Chroococcus","minutus",FALSE,10,7.5,NA,3,0.00066,NA,NA,""
+"Rotorua","Hamurana",2026-01-19,"20A","Whole Plate","Phormidium","sp",TRUE,10,40,NA,16,0.00149344,16,0.00149344,NA
+"Rotorua","Hamurana",2026-01-19,"20A","Whole Plate","Planktothrix","sp",TRUE,10,48,NA,4.8,0.0015072,4.8,0.0015072,NA
+"Rotorua","Hamurana",2026-01-19,"20A","Whole Plate","Dolichospermum circinale",NA,TRUE,10,21,1,44.1,0.025385724,44.1,0.025385724,NA
+"Rotorua","Hamurana",2026-01-19,"20A","Whole Plate","Pseudanabaena","sp.",TRUE,10,16.5,6,42.9,0.0016731,42.9,0.0016731,NA
+"Rotorua","Hamurana",2026-01-19,"20A","Whole Plate","Dolichospermum planctonicum ",NA,TRUE,10,23.65,12,75.68,0.0280016,75.68,0.0280016,NA
+"Rotorua","Holdens Bay",2026-01-19,"20A","160","Dolichospermum circinale",NA,TRUE,10,23.3333333333333,NA,879.647222222222,0.506360127,879.647222222222,0.506360127,NA
+"Rotorua","Holdens Bay",2026-01-19,"20A","160","Dolichospermum planctonicum ",NA,TRUE,10,40.6666666666667,NA,383.274861111111,0.141811698611111,383.274861111111,0.141811698611111,NA
+"Rotorua","Holdens Bay",2026-01-19,"20A","160","Pseudanabaena","sp.",TRUE,10,15.6,NA,245.044583333333,0.00955673874999999,245.044583333333,0.00955673874999999,NA
+"Rotorua","Holdens Bay",2026-01-19,"20A","160","Microcystis","wesenbergii",TRUE,10,52,NA,163.363055555556,0.031092890363889,163.363055555556,0.031092890363889,"Microcystis spp.
+"
+"Rotorua","Ngongotaha",2026-01-19,"20A","160","Oscillatoria","sp",TRUE,10,63,NA,593.761875,1.6058289909375,593.761875,1.6058289909375,NA
+"Rotorua","Ngongotaha",2026-01-19,"20A","160","Pseudanabaena","sp.",TRUE,10,12.55,16,1419.373625,0.055355571375,1419.373625,0.055355571375,NA
+"Rotorua","Ohau Channel",2026-01-19,"20A","160","Dolichospermum planctonicum ",NA,TRUE,10,9.28571428571429,NA,204.203819444444,0.0755554131944443,204.203819444444,0.0755554131944443,NA
+"Rotorua","Ohau Channel",2026-01-19,"20A","160","Dolichospermum circinale",NA,TRUE,10,19.3333333333333,NA,364.425277777778,0.2097777669,364.425277777778,0.2097777669,NA
+"Rotorua","Hamurana",2026-01-12,"20A","Whole Plate","Dolichospermum planctonicum ",NA,TRUE,10,21.15,4,50.76,0.0187812,50.76,0.0187812,NA
+"Rotorua","Hamurana",2026-01-12,"20A","Whole Plate","Dolichospermum circinale",NA,TRUE,10,45.6,NA,68.4,0.039373776,68.4,0.039373776,NA
+"Rotorua","Holdens Bay",2026-01-12,"20A","Whole Plate","Pseudanabaena","sp.",TRUE,10,11.4,137,178.98,0.00698022,178.98,0.00698022,NA
+"Rotorua","Holdens Bay",2026-01-12,"20A","Whole Plate","Oscillatoria","sp",TRUE,10,22,NA,6.6,0.0178497,6.6,0.0178497,NA
+"Rotorua","Holdens Bay",2026-01-12,"20A","Whole Plate","Dolichospermum circinale",NA,TRUE,10,14.875,NA,11.9,0.006850116,11.9,0.006850116,NA
+"Rotorua","Holdens Bay",2026-01-12,"20A","Whole Plate","Dolichospermum planctonicum ",NA,TRUE,10,47,NA,9.4,0.003478,9.4,0.003478,NA
+"Rotorua","Ngongotaha",2026-01-12,"20A","Whole Plate","Pseudanabaena","galeata",TRUE,10,9.33333333333333,NA,2.8,0.000168,2.8,0.000168,NA
+"Rotorua","Ngongotaha",2026-01-12,"20A","Whole Plate","Pseudanabaena","limnetica",TRUE,10,16.0714285714286,NA,22.5,0.0017775,22.5,0.0017775,NA
+"Rotorua","Ngongotaha",2026-01-12,"20A","Whole Plate","Dolichospermum circinale",NA,TRUE,10,33.3333333333333,NA,40,0.0230256,40,0.0230256,NA
+"Rotorua","Ngongotaha",2026-01-12,"20A","Whole Plate","Dolichospermum","spiroides",TRUE,10,32,NA,3.2,0.000832,3.2,0.000832,NA
+"Rotorua","Ngongotaha",2026-01-12,"20A","Whole Plate","Oscillatoria","sp",TRUE,10,16,NA,3.2,0.0086544,3.2,0.0086544,NA
+"Rotorua","Ngongotaha",2026-01-12,"20A","Whole Plate","Dolichospermum planctonicum ",NA,TRUE,10,22.6666666666667,NA,6.8,0.002516,6.8,0.002516,NA
+"Rotorua","Ohau Channel",2026-01-12,"20A","160","Dolichospermum circinale",NA,TRUE,10,22.6,7,1917.002625,1.103503391055,1917.002625,1.103503391055,NA
+"Rotorua","Ohau Channel",2026-01-12,"20A","160","Dolichospermum planctonicum ",NA,TRUE,10,27,NA,339.2925,0.125538225,339.2925,0.125538225,NA
+"Rotorua","Ohau Channel",2026-01-12,"20A","160","Pseudanabaena","limnetica",TRUE,10,12,NA,37.6991666666667,0.00297823416666667,37.6991666666667,0.00297823416666667,NA
+"Rotorua","Ohau Channel",2026-01-12,"20A","160","Dolichospermum","spiroides",TRUE,10,34.5,NA,216.770208333333,0.0563602541666666,216.770208333333,0.0563602541666666,NA
+"Rotorua","Hamurana",2026-01-05,"20A","160","Pseudanabaena","limnetica",TRUE,10,15.2,NA,238.761388888889,0.0188621497222222,238.761388888889,0.0188621497222222,NA
+"Rotorua","Hamurana",2026-01-05,"20A","160","Dolichospermum circinale",NA,TRUE,10,23,NA,1011.59430555556,0.582314146050003,1011.59430555556,0.582314146050003,NA
+"Rotorua","Hamurana",2026-01-05,"20A","160","Dolichospermum planctonicum ",NA,TRUE,10,26.6666666666667,NA,251.327777777778,0.0929912777777779,251.327777777778,0.0929912777777779,NA
+"Rotorua","Holdens Bay",2026-01-05,"20A","160","Pseudanabaena","limnetica",TRUE,10,14,NA,351.858888888889,0.0277968522222222,351.858888888889,0.0277968522222222,NA
+"Rotorua","Holdens Bay",2026-01-05,"20A","160","Dolichospermum circinale",NA,TRUE,10,32.2666666666667,NA,1520.53305555556,0.875279648100003,1520.53305555556,0.875279648100003,NA
+"Rotorua","Ngongotaha",2026-01-05,"20A","160","Dolichospermum circinale",NA,TRUE,10,35.7142857142857,NA,1570.79861111111,0.904214512499999,1570.79861111111,0.904214512499999,NA
+"Rotorua","Ngongotaha",2026-01-05,"20A","160","Dolichospermum planctonicum ",NA,TRUE,10,30.0526315789474,NA,1793.85201388889,0.663725245138889,1793.85201388889,0.663725245138889,NA
+"Rotorua","Ngongotaha",2026-01-05,"20A","160","Microcystis","wesenbergii",TRUE,10,18,NA,56.54875,0.0107629235875,56.54875,0.0107629235875,"Microcystis spp.
+"
+"Rotorua","Ohau Channel",2026-01-05,"20A","160","Dolichospermum circinale",NA,TRUE,10,25.4285714285714,NA,1118.40861111111,0.643800732899999,1118.40861111111,0.643800732899999,NA
+"Rotorua","Ohau Channel",2026-01-05,"20A","160","Dolichospermum planctonicum ",NA,TRUE,10,15.3333333333333,NA,144.513472222222,0.0534699847222221,144.513472222222,0.0534699847222221,NA
+"Rotorua","Hamurana",2025-12-29,"20A","Whole Plate","Dolichospermum","sp",TRUE,10,13.6,NA,6.8,0.001292,6.8,0.001292,NA
+"Rotorua","Hamurana",2025-12-29,"20A","Whole Plate","Dolichospermum circinale",NA,TRUE,10,38.6666666666667,NA,23.2,0.013354848,23.2,0.013354848,NA
+"Rotorua","Hamurana",2025-12-29,"20A","Whole Plate","Pseudanabaena","limnetica",TRUE,10,15,NA,3,0.000237,3,0.000237,NA
+"Rotorua","Hamurana",2025-12-29,"20A","Whole Plate","Planktothrix","sp",TRUE,10,34,NA,3.4,0.0010676,3.4,0.0010676,NA
+"Rotorua","Hamurana",2025-12-29,"20A","Whole Plate","Dolichospermum planctonicum ",NA,TRUE,10,10,NA,1,0.00037,1,0.00037,NA
+"Rotorua","Hamurana",2025-12-29,"20A","Whole Plate","Oscillatoria","sp",TRUE,10,18,NA,1.8,0.0048681,1.8,0.0048681,NA
+"Rotorua","Holdens Bay",2025-12-29,"20A","160","Dolichospermum","sp",TRUE,10,7.33333333333333,NA,69.1151388888889,0.0131318763888889,69.1151388888889,0.0131318763888889,NA
+"Rotorua","Holdens Bay",2025-12-29,"20A","160","Dolichospermum","spiroides",TRUE,10,31,NA,194.779027777778,0.0506425472222223,194.779027777778,0.0506425472222223,NA
+"Rotorua","Holdens Bay",2025-12-29,"20A","160","Pseudanabaena","limnetica",TRUE,10,14.6666666666667,NA,276.460555555556,0.0218403838888889,276.460555555556,0.0218403838888889,NA
+"Rotorua","Holdens Bay",2025-12-29,"20A","160","Dolichospermum circinale",NA,TRUE,10,43.8,NA,688.009791666667,0.396045956475,688.009791666667,0.396045956475,NA
+"Rotorua","Holdens Bay",2025-12-29,"20A","160","Phormidium","sp",TRUE,10,192,NA,603.186666666667,0.0563014434666667,603.186666666667,0.0563014434666667,NA
+"Rotorua","Ngongotaha",2025-12-29,"20A","Whole Plate","Dolichospermum planctonicum ",NA,TRUE,10,14.6666666666667,NA,8.8,0.003256,8.8,0.003256,NA
+"Rotorua","Ngongotaha",2025-12-29,"20A","Whole Plate","Oscillatoria","sp",TRUE,10,44,NA,8.8,0.0237996,8.8,0.0237996,NA
+"Rotorua","Ngongotaha",2025-12-29,"20A","Whole Plate","Pseudanabaena","limnetica",TRUE,10,8.84615384615385,NA,11.5,0.0009085,11.5,0.0009085,NA
+"Rotorua","Ngongotaha",2025-12-29,"20A","Whole Plate","Dolichospermum circinale",NA,TRUE,10,33.5,NA,13.4,0.007713576,13.4,0.007713576,NA
+"Rotorua","Ohau Channel",2025-12-29,"20A","160","Dolichospermum circinale",NA,TRUE,10,32.2,2,2225.50747222222,1.28109112131,2225.50747222222,1.28109112131,NA
+"Rotorua","Ohau Channel",2025-12-29,"20A","160","Dolichospermum planctonicum ",NA,TRUE,10,17.05,5,1339.10581597222,0.495469151909721,1339.10581597222,0.495469151909721,NA
+"Rotorua","Ohau Channel",2025-12-29,"20A","160","Dolichospermum","spiroides",TRUE,10,27,NA,169.64625,0.044108025,169.64625,0.044108025,NA
+"Rotorua","Ohau Channel",2025-12-29,"20A","160","Microcystis","sp",TRUE,10,50,NA,157.079861111111,0.0112781096266298,157.079861111111,0.0112781096266298,"Microcystis spp.
+"
 "Rotorua","Holdens Bay",2025-02-10,"20A","Whole Plate","Microcystis","wesenbergii",TRUE,10,45,NA,13.5,0.002569455,13.5,0.002569455,"Microcystis spp.
 "
 "Rotorua","Holdens Bay",2025-02-10,"20A","Whole Plate","Dolichospermum","sp",TRUE,10,13,NA,2.6,0.000494,2.6,0.000494,NA
@@ -3173,34 +3234,48 @@
 "Rotorua","Ngongotaha",2025-12-15,"20A","160","Dolichospermum planctonicum ",NA,TRUE,10,38.3333333333333,NA,361.283680555556,0.133674961805556,361.283680555556,0.133674961805556,NA
 "Rotorua","Ngongotaha",2025-12-15,"20A","160","Microcystis","wesenbergii",TRUE,10,132,NA,414.690833333333,0.0789281063083333,414.690833333333,0.0789281063083333,"Microcystis spp.
 "
-"Rotorua","Ohau Channel",2025-12-29,"20A","160","Dolichospermum circinale",NA,TRUE,10,32.2,2,2225.50747222222,1.28109112131,2225.50747222222,1.28109112131,NA
-"Rotorua","Ohau Channel",2025-12-29,"20A","160","Dolichospermum planctonicum ",NA,TRUE,10,17.05,5,1339.10581597222,0.495469151909721,1339.10581597222,0.495469151909721,NA
-"Rotorua","Ohau Channel",2025-12-29,"20A","160","Dolichospermum","spiroides",TRUE,10,27,NA,169.64625,0.044108025,169.64625,0.044108025,NA
-"Rotorua","Ohau Channel",2025-12-29,"20A","160","Microcystis","sp",TRUE,10,50,NA,157.079861111111,0.0112781096266298,157.079861111111,0.0112781096266298,"Microcystis spp.
+"Rotorua","Hamurana",2026-01-26,"20A","Whole Plate","Dolichospermum planctonicum ",NA,TRUE,10,25.6666666666667,NA,46.2,0.017094,46.2,0.017094,NA
+"Rotorua","Hamurana",2026-01-26,"20A","Whole Plate","Dolichospermum circinale",NA,TRUE,10,32.9,21,134.89,0.0776480796,134.89,0.0776480796,NA
+"Rotorua","Hamurana",2026-01-26,"20A","Whole Plate","Phormidium","sp",TRUE,10,29.3333333333333,NA,8.8,0.000821392,8.8,0.000821392,NA
+"Rotorua","Hamurana",2026-01-26,"20A","Whole Plate","Dolichospermum","spiroides",TRUE,10,35.5,NA,7.1,0.001846,7.1,0.001846,NA
+"Rotorua","Hamurana",2026-01-26,"20A","Whole Plate","Pseudanabaena","galeata",TRUE,10,8,NA,0.8,4.8e-05,0.8,4.8e-05,NA
+"Rotorua","Hamurana",2026-01-26,"20A","Whole Plate","Microcystis","wesenbergii",TRUE,10,32,NA,3.2,0.000609056,3.2,0.000609056,"Microcystis spp.
 "
-"Rotorua","Holdens Bay",2025-12-29,"20A","160","Dolichospermum","sp",TRUE,10,7.33333333333333,NA,69.1151388888889,0.0131318763888889,69.1151388888889,0.0131318763888889,NA
-"Rotorua","Holdens Bay",2025-12-29,"20A","160","Dolichospermum","spiroides",TRUE,10,31,NA,194.779027777778,0.0506425472222223,194.779027777778,0.0506425472222223,NA
-"Rotorua","Holdens Bay",2025-12-29,"20A","160","Pseudanabaena","limnetica",TRUE,10,14.6666666666667,NA,276.460555555556,0.0218403838888889,276.460555555556,0.0218403838888889,NA
-"Rotorua","Holdens Bay",2025-12-29,"20A","160","Dolichospermum circinale",NA,TRUE,10,43.8,NA,688.009791666667,0.396045956475,688.009791666667,0.396045956475,NA
-"Rotorua","Holdens Bay",2025-12-29,"20A","160","Phormidium","sp",TRUE,10,192,NA,603.186666666667,0.0563014434666667,603.186666666667,0.0563014434666667,NA
-"Rotorua","Hamurana",2025-12-29,"20A","Whole Plate","Dolichospermum","sp",TRUE,10,13.6,NA,6.8,0.001292,6.8,0.001292,NA
-"Rotorua","Hamurana",2025-12-29,"20A","Whole Plate","Dolichospermum circinale",NA,TRUE,10,38.6666666666667,NA,23.2,0.013354848,23.2,0.013354848,NA
-"Rotorua","Hamurana",2025-12-29,"20A","Whole Plate","Pseudanabaena","limnetica",TRUE,10,15,NA,3,0.000237,3,0.000237,NA
-"Rotorua","Hamurana",2025-12-29,"20A","Whole Plate","Planktothrix","sp",TRUE,10,34,NA,3.4,0.0010676,3.4,0.0010676,NA
-"Rotorua","Hamurana",2025-12-29,"20A","Whole Plate","Dolichospermum planctonicum ",NA,TRUE,10,10,NA,1,0.00037,1,0.00037,NA
-"Rotorua","Hamurana",2025-12-29,"20A","Whole Plate","Oscillatoria","sp",TRUE,10,18,NA,1.8,0.0048681,1.8,0.0048681,NA
-"Rotorua","Ngongotaha",2025-12-29,"20A","Whole Plate","Dolichospermum planctonicum ",NA,TRUE,10,14.6666666666667,NA,8.8,0.003256,8.8,0.003256,NA
-"Rotorua","Ngongotaha",2025-12-29,"20A","Whole Plate","Oscillatoria","sp",TRUE,10,44,NA,8.8,0.0237996,8.8,0.0237996,NA
-"Rotorua","Ngongotaha",2025-12-29,"20A","Whole Plate","Pseudanabaena","limnetica",TRUE,10,8.84615384615385,NA,11.5,0.0009085,11.5,0.0009085,NA
-"Rotorua","Ngongotaha",2025-12-29,"20A","Whole Plate","Dolichospermum circinale",NA,TRUE,10,33.5,NA,13.4,0.007713576,13.4,0.007713576,NA
-"Rotorua","Ngongotaha",2026-01-05,"20A","160","Dolichospermum circinale",NA,TRUE,10,35.7142857142857,NA,1570.79861111111,0.904214512499999,1570.79861111111,0.904214512499999,NA
-"Rotorua","Ngongotaha",2026-01-05,"20A","160","Dolichospermum planctonicum ",NA,TRUE,10,30.0526315789474,NA,1793.85201388889,0.663725245138889,1793.85201388889,0.663725245138889,NA
-"Rotorua","Ngongotaha",2026-01-05,"20A","160","Microcystis","wesenbergii",TRUE,10,18,NA,56.54875,0.0107629235875,56.54875,0.0107629235875,"Microcystis spp.
+"Rotorua","Holdens Bay",2026-01-26,"20A","Whole Plate","Microcystis","wesenbergii",TRUE,10,63.6666666666667,NA,19.1,0.003635303,19.1,0.003635303,"Microcystis spp.
 "
-"Rotorua","Holdens Bay",2026-01-05,"20A","160","Pseudanabaena","limnetica",TRUE,10,14,NA,351.858888888889,0.0277968522222222,351.858888888889,0.0277968522222222,NA
-"Rotorua","Holdens Bay",2026-01-05,"20A","160","Dolichospermum circinale",NA,TRUE,10,32.2666666666667,NA,1520.53305555556,0.875279648100003,1520.53305555556,0.875279648100003,NA
-"Rotorua","Ohau Channel",2026-01-05,"20A","160","Dolichospermum circinale",NA,TRUE,10,25.4285714285714,NA,1118.40861111111,0.643800732899999,1118.40861111111,0.643800732899999,NA
-"Rotorua","Ohau Channel",2026-01-05,"20A","160","Dolichospermum planctonicum ",NA,TRUE,10,15.3333333333333,NA,144.513472222222,0.0534699847222221,144.513472222222,0.0534699847222221,NA
-"Rotorua","Hamurana",2026-01-05,"20A","160","Pseudanabaena","limnetica",TRUE,10,15.2,NA,238.761388888889,0.0188621497222222,238.761388888889,0.0188621497222222,NA
-"Rotorua","Hamurana",2026-01-05,"20A","160","Dolichospermum circinale",NA,TRUE,10,23,NA,1011.59430555556,0.582314146050003,1011.59430555556,0.582314146050003,NA
-"Rotorua","Hamurana",2026-01-05,"20A","160","Dolichospermum planctonicum ",NA,TRUE,10,26.6666666666667,NA,251.327777777778,0.0929912777777779,251.327777777778,0.0929912777777779,NA
+"Rotorua","Holdens Bay",2026-01-26,"20A","Whole Plate","Dolichospermum circinale",NA,TRUE,10,17.1818181818182,NA,18.9,0.010879596,18.9,0.010879596,NA
+"Rotorua","Holdens Bay",2026-01-26,"20A","Whole Plate","Dolichospermum planctonicum ",NA,TRUE,10,23.05,50,161.35,0.0596995,161.35,0.0596995,NA
+"Rotorua","Holdens Bay",2026-01-26,"20A","Whole Plate","Phormidium","sp",TRUE,10,102,NA,10.2,0.000952068,10.2,0.000952068,NA
+"Rotorua","Ngongotaha",2026-01-26,"20A","160","Dolichospermum circinale",NA,TRUE,10,26.0588235294118,NA,1391.72756944444,0.801134058074997,1391.72756944444,0.801134058074997,NA
+"Rotorua","Ngongotaha",2026-01-26,"20A","160","Pseudanabaena","sp.",TRUE,10,18.6666666666667,NA,351.858888888889,0.0137224966666667,351.858888888889,0.0137224966666667,NA
+"Rotorua","Ngongotaha",2026-01-26,"20A","160","Microcystis","wesenbergii",TRUE,10,48,NA,301.593333333333,0.0574022591333333,301.593333333333,0.0574022591333333,"Microcystis spp.
+"
+"Rotorua","Ohau Channel",2026-01-26,"20A","160","Microcystis","wesenbergii",TRUE,10,56,NA,527.788333333333,0.100453953483333,527.788333333333,0.100453953483333,"Microcystis spp.
+"
+"Rotorua","Ohau Channel",2026-01-26,"20A","160","Dolichospermum circinale",NA,TRUE,10,25.5,NA,961.32875,0.55337928165,961.32875,0.55337928165,NA
+"Rotorua","Ngongotaha",2026-02-16,"20A","Whole Plate","Dolichospermum circinale",NA,TRUE,10,40.45,43,254.835,0.1466932194,254.835,0.1466932194,NA
+"Rotorua","Ngongotaha",2026-02-16,"20A","Whole Plate","Microcystis","wesenbergii",TRUE,10,44.3,62,363.26,0.0691392758,363.26,0.0691392758,"Microcystis spp.
+"
+"Rotorua","Ngongotaha",2026-02-16,"20A","Whole Plate","Microcystis","sp",TRUE,10,32,NA,6.4,0.000459510857088,6.4,0.000459510857088,"Microcystis spp.
+"
+"Rotorua","Ngongotaha",2026-02-16,"20A","Whole Plate","Aphanocapsa","sp",FALSE,10,431.5,NA,86.3,0.000194175,0,0,NA
+"Rotorua","Ohau Channel",2026-02-16,"20A","Whole Plate","Dolichospermum circinale",NA,TRUE,10,33.75,13,111.375,0.064111905,111.375,0.064111905,NA
+"Rotorua","Ohau Channel",2026-02-16,"20A","Whole Plate","Microcystis","wesenbergii",TRUE,10,50.1,7,135.27,0.0257459391,135.27,0.0257459391,"Microcystis spp.
+"
+"Rotorua","Ohau Channel",2026-02-16,"20A","Whole Plate","Aphanocapsa","sp",FALSE,10,90.6666666666667,NA,27.2,6.12e-05,0,0,NA
+"Rotorua","Ohau Channel",2026-02-16,"20A","Whole Plate","Pseudanabaena","sp.",TRUE,10,8.66666666666667,NA,2.6,0.0001014,2.6,0.0001014,NA
+"Rotorua","Ohau Channel",2026-02-16,"20A","Whole Plate","Oscillatoria","sp",TRUE,10,26,NA,5.2,0.0140634,5.2,0.0140634,NA
+"Rotorua","Ohau Channel",2026-02-16,"20A","Whole Plate","Dolichospermum","sp",TRUE,10,14,NA,1.4,0.000266,1.4,0.000266,NA
+"Rotorua","Hamurana",2026-02-16,"20A","Whole Plate","Dolichospermum circinale",NA,TRUE,10,34.5,14,117.3,0.067522572,117.3,0.067522572,NA
+"Rotorua","Hamurana",2026-02-16,"20A","Whole Plate","Microcystis","wesenbergii",TRUE,10,45.45,42,281.79,0.0536330907,281.79,0.0536330907,"Microcystis spp.
+"
+"Rotorua","Hamurana",2026-02-16,"20A","Whole Plate","Dolichospermum planctonicum ",NA,TRUE,10,24,NA,2.4,0.000888,2.4,0.000888,NA
+"Rotorua","Hamurana",2026-02-16,"20A","Whole Plate","Dolichospermum","spiroides",TRUE,10,42,NA,4.2,0.001092,4.2,0.001092,NA
+"Rotorua","Hamurana",2026-02-16,"20A","Whole Plate","Aphanocapsa","sp",FALSE,10,236,NA,23.6,5.31e-05,0,0,NA
+"Rotorua","Hamurana",2026-02-16,"20A","Whole Plate","Oscillatoria","sp",TRUE,10,259.666666666667,NA,77.9,0.21068055,77.9,0.21068055,NA
+"Rotorua","Holdens Bay",2026-02-16,"20A","Whole Plate","Microcystis","wesenbergii",TRUE,10,32,NA,6.4,0.001218112,6.4,0.001218112,"Microcystis spp.
+"
+"Rotorua","Holdens Bay",2026-02-16,"20A","Whole Plate","Dolichospermum planctonicum ",NA,TRUE,10,13.3333333333333,NA,4,0.00148,4,0.00148,NA
+"Rotorua","Holdens Bay",2026-02-16,"20A","Whole Plate","Pseudanabaena","sp.",TRUE,10,18,NA,18,0.000702,18,0.000702,NA
+"Rotorua","Holdens Bay",2026-02-16,"20A","Whole Plate","Dolichospermum circinale",NA,TRUE,10,14.2,NA,7.1,0.004087044,7.1,0.004087044,NA
+"Rotorua","Holdens Bay",2026-02-16,"20A","Whole Plate","Oscillatoria","sp",TRUE,10,83.5,NA,33.4,0.0903303,33.4,0.0903303,NA
