@@ -5,7 +5,7 @@ library(tsibble)
 source('./scripts/functions/yr_to_hydro_yr.R')
 
 ########## read in biovolume data
-boprc <- read.csv('./data/boprc_cyano/boprc_cyano_2015-01-07_2025-05-26.csv')%>% 
+boprc <- read.csv('./data/boprc_cyano/boprc_cyano_latest.csv')%>% 
   select(Location, Site, SampleDate, PotentiallyToxicBioVolume) %>% 
   filter(!is.na(PotentiallyToxicBioVolume)) %>% 
   group_by(Site, SampleDate) %>% 
@@ -129,3 +129,4 @@ tgt_ts <- boprc_clean %>%
   mutate(observed = log_biovolume)#
 
 write.csv(tgt_ts, './data/biovolume_targets.csv', row.names = FALSE)
+
