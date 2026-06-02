@@ -1,6 +1,8 @@
 library(tidyverse)
 library(ggpubr)
 library(scoringRules)
+library(aemetools)
+source('./scripts/functions/get_lake_wqprofiler_data.R')
 
 # read in targets
 targets <- read.csv('./data/biovolume_targets.csv')
@@ -8,7 +10,9 @@ targets$date <- as.Date(targets$date)
 
 ################################################################################
 # read in profiling buoy data
-buoy <- read.csv('./data/buoy/rotorua_profiles_latest.csv')
+buoy <- get_lake_wqprofiler(lake= 'rotorua', api_key = 'lernzmp_lakes')
+#buoy <- read.csv('./data/buoy/rotorua_profiles_latest.csv')
+
 buoy_daily <- buoy %>% 
   pivot_longer(TmpWtr:FlPhyc, names_to = 'variable', values_to = 'value') %>% 
   mutate(date = as.Date(DateTime)) %>% 
@@ -67,7 +71,7 @@ buoy_wide <- buoy_wide %>%
 a <- buoy_wide %>% 
   filter(date > '2024-11-30') %>% 
   ggplot(aes(x = as.Date(date), y = phyco_RFU_int_avg, color = 'buoy phyco RFU')) +
-  xlim(as.Date('2024-11-30'), as.Date('2025-05-31')) + 
+  xlim(as.Date('2024-11-30'), as.Date(max(buoy_wide$date))) + 
   ylim(0, 20) +
   geom_point() +
   geom_line() +
@@ -78,6 +82,7 @@ a <- buoy_wide %>%
 a
 ################################################################################
 # combine the dataframes
+targets$date <- as.Date(targets$date)
 buoy_bv <- left_join(targets, buoy_wide)
 
 # remove days from before profiling buoy went out
@@ -93,6 +98,7 @@ p1 <- ggplot(buoy_bv, aes(x = log(sum_biovolume), y = log(phyco_RFU_int_avg))) +
   ylab('Log of Depth Averaged Fluorescence (RFU)') +
   xlab('Log of Toxic Biovolume (mm3/L)') +
   theme_bw() 
+p1
 
 ggsave('./figures/nzfss/bv_phyco_relationship.png',
        p1, width = 250, height = 200, dpi = 300, scale = 0.6,
@@ -106,7 +112,7 @@ buoy_bv <- buoy_bv %>%
 #### function stuff
 source('scripts/functions/fit_buoy_bv.R')
 
-dates <- seq.Date(as.Date('2024-11-25'), as.Date('2025-05-21'), by = 'week')
+dates <- seq.Date(as.Date('2024-11-25'), as.Date(max(buoy_wide$date)), by = 'week')
 dates <- unique(buoy_bv$date)
 dates <- dates[dates >= as.Date('2024-11-25')]
 
@@ -125,15 +131,20 @@ for(i in 1:length(dates)){
   }
 }
 
+# add a year column to separate the sampling years
+out <- out %>% 
+  mutate(sampling_year = format(as.POSIXct(date) + (184*60*60*24), "%Y"))
+
 p <- ggplot(out, aes(x = date, y = pred_bv_native, color = 'Buoy predicted')) +
   geom_point() +
   geom_line() +
   #geom_ribbon(aes(ymin = pred_lower, ymax = pred_upper), fill = "skyblue", alpha = 0.3) +
   geom_point(aes(x = date, y = observed_bv, color = 'Obs Biovolume')) +
   geom_line(aes(x = date, y = observed_bv, color = 'Obs Biovolume')) +
-  facet_wrap(~factor(Site,
+  facet_wrap(sampling_year~factor(Site,
                      levels = c('Hamurana', 'Ohau Channel',
-                                'Ngongotaha', 'Holdens Bay'))) +
+                                'Ngongotaha', 'Holdens Bay')),
+             scales = 'free_x',  nrow = 2) +
   scale_color_manual(values = c('#0072B2', 'red')) +
   theme_bw() +
   labs(color = NULL) +
@@ -142,6 +153,54 @@ p
 ggsave('./figures/nzfss/buoy_obs_bv_comparison.png', p,
        width = 250, height = 150, dpi = 300, scale = 0.7,
        unit = 'mm')
+
+p25 <- out %>% 
+  filter(out$date > '2024-06-01' & out$date < '2025-06-01') %>% 
+  ggplot(aes(x = date, y = pred_bv_native, color = 'Buoy predicted')) +
+  geom_point() +
+  geom_line() +
+  #geom_ribbon(aes(ymin = pred_lower, ymax = pred_upper), fill = "skyblue", alpha = 0.3) +
+  geom_point(aes(x = date, y = observed_bv, color = 'Obs Biovolume')) +
+  geom_line(aes(x = date, y = observed_bv, color = 'Obs Biovolume')) +
+  facet_wrap(~factor(Site, levels = c('Hamurana', 'Ohau Channel',
+                                     'Ngongotaha', 'Holdens Bay')),
+             scales = 'free_x',  nrow = 2) +
+  scale_color_manual(values = c('#0072B2', 'red')) +
+  scale_x_date(
+    limits = as.Date(c("2024-11-01", "2025-05-30")),
+    date_breaks = "1 month",
+    date_labels = "%b") +
+  ylim(0, 20) +
+  theme_bw() +
+  labs(color = NULL) +
+  ylab(expression(paste("Potentially Toxic Biovolume (mm"^3, " ", L^-1, ")"))) +
+  ggtitle('Summer 2024-2025')
+p25  
+
+p26 <- out %>% 
+  filter(out$date > '2025-06-01') %>% 
+  ggplot(aes(x = date, y = pred_bv_native, color = 'Buoy predicted')) +
+  geom_point() +
+  geom_line() +
+  #geom_ribbon(aes(ymin = pred_lower, ymax = pred_upper), fill = "skyblue", alpha = 0.3) +
+  geom_point(aes(x = date, y = observed_bv, color = 'Obs Biovolume')) +
+  geom_line(aes(x = date, y = observed_bv, color = 'Obs Biovolume')) +
+  facet_wrap(~factor(Site, levels = c('Hamurana', 'Ohau Channel',
+                                      'Ngongotaha', 'Holdens Bay')),
+             scales = 'free_x',  nrow = 2) +
+  scale_color_manual(values = c('#0072B2', 'red')) +
+  scale_x_date(
+    limits = as.Date(c("2025-11-01", "2026-05-30")),
+    date_breaks = "1 month",
+    date_labels = "%b") +
+  theme_bw() +
+  labs(color = NULL) +
+  ylim(0, 20) +
+  ylab(expression(paste("Potentially Toxic Biovolume (mm"^3, " ", L^-1, ")"))) +
+  ggtitle('Summer 2025-2026')
+p26  
+
+ggarrange(p25, p26, common.legend = TRUE)
 
 # look at just during the bloomy times
 out %>% 
@@ -189,7 +248,7 @@ image_write(img_gif, "./figures/nzfss/biovolume_animation.gif")
 image_write_video(img_list, path = "./figures/nzfss/biovolume_animation.mp4",
                   framerate = 1)
 
-
+##### score forecasts
 out <- out %>% 
   group_by(Site, date) %>% 
   mutate(rmse = sqrt(mean((pred_bv_native - observed_bv)^2, na.rm = TRUE)),
